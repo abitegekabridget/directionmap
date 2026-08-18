@@ -1,11 +1,11 @@
 // ======================================================
-// UGANDA DIRECTION MAP
-// Leaflet + OpenStreetMap + Nominatim + OSRM
+// UGANDA EAST / WEST DIRECTION MAP
+// Complete replacement app.js
 // ======================================================
 
 
 // ======================================================
-// 1. CREATE MAP
+// 1. INITIALIZE MAP
 // ======================================================
 
 const map = L.map("map").setView(
@@ -15,16 +15,21 @@ const map = L.map("map").setView(
 
 
 // ======================================================
-// 2. OPENSTREETMAP
+// 2. MAP TILE LAYER
+// ======================================================
+// Using CARTO instead of the OpenStreetMap tile server.
+// This avoids the tile.openstreetmap.org timeout problem.
 // ======================================================
 
 L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
     {
-        maxZoom: 19,
-
         attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            '&copy; OpenStreetMap contributors &copy; CARTO',
+
+        subdomains: "abcd",
+
+        maxZoom: 20
     }
 ).addTo(map);
 
@@ -43,9 +48,13 @@ let toMarker = null;
 
 let routeLine = null;
 
+let fromSearchTimer = null;
+
+let toSearchTimer = null;
+
 
 // ======================================================
-// 4. HTML ELEMENTS
+// 4. GET HTML ELEMENTS
 // ======================================================
 
 const fromInput =
@@ -102,10 +111,19 @@ fromInput.addEventListener(
     "input",
     function () {
 
-        searchLocations(
-            fromInput.value,
-            fromResults,
-            "from"
+        clearTimeout(fromSearchTimer);
+
+        fromSearchTimer = setTimeout(
+            function () {
+
+                searchLocations(
+                    fromInput.value,
+                    fromResults,
+                    "from"
+                );
+
+            },
+            400
         );
 
     }
@@ -120,10 +138,19 @@ toInput.addEventListener(
     "input",
     function () {
 
-        searchLocations(
-            toInput.value,
-            toResults,
-            "to"
+        clearTimeout(toSearchTimer);
+
+        toSearchTimer = setTimeout(
+            function () {
+
+                searchLocations(
+                    toInput.value,
+                    toResults,
+                    "to"
+                );
+
+            },
+            400
         );
 
     }
@@ -131,7 +158,16 @@ toInput.addEventListener(
 
 
 // ======================================================
-// 7. NOMINATIM SEARCH
+// 7. PHOTON SEARCH
+// ======================================================
+// Photon is used instead of the Nominatim endpoint that
+// was timing out in your GitHub Pages deployment.
+//
+// Uganda bounding box:
+// West: 29.5
+// South: -1.5
+// East: 35.2
+// North: 4.3
 // ======================================================
 
 async function searchLocations(
@@ -147,6 +183,8 @@ async function searchLocations(
 
         resultContainer.style.display =
             "none";
+
+        resultContainer.innerHTML = "";
 
         return;
     }
@@ -169,40 +207,77 @@ async function searchLocations(
 
                 q: query,
 
-                format: "json",
-
-                addressdetails: "1",
-
                 limit: "8",
 
-                countrycodes: "ug"
+                lang: "en",
+
+                bbox:
+                    "29.5,-1.5,35.2,4.3"
 
             });
 
 
         const response =
             await fetch(
-                `https://nominatim.openstreetmap.org/search?${params}`,
-                {
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    }
-                }
+                `https://photon.komoot.io/api/?${params}`
             );
 
 
         if (!response.ok) {
 
             throw new Error(
-                "Location search failed."
+                `Search request failed: ${response.status}`
             );
 
         }
 
 
-        const results =
+        const data =
             await response.json();
+
+
+        const features =
+            data.features || [];
+
+
+        // Keep only locations that are actually
+        // within the Uganda bounding box.
+
+        const results =
+            features.filter(
+                function (place) {
+
+                    if (
+                        !place.geometry ||
+                        !place.geometry.coordinates
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    const longitude =
+                        parseFloat(
+                            place.geometry.coordinates[0]
+                        );
+
+
+                    const latitude =
+                        parseFloat(
+                            place.geometry.coordinates[1]
+                        );
+
+
+                    return (
+                        latitude >= -1.5 &&
+                        latitude <= 4.3 &&
+                        longitude >= 29.5 &&
+                        longitude <= 35.2
+                    );
+
+                }
+            );
 
 
         displaySearchResults(
@@ -214,14 +289,21 @@ async function searchLocations(
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Location search error:",
+            error
+        );
 
 
         resultContainer.innerHTML = `
             <div class="search-result">
                 Unable to search right now.
+                Please check your internet connection.
             </div>
         `;
+
+        resultContainer.style.display =
+            "block";
 
     }
 
@@ -241,13 +323,16 @@ function displaySearchResults(
     container.innerHTML = "";
 
 
-    if (results.length === 0) {
+    if (!results || results.length === 0) {
 
         container.innerHTML = `
             <div class="search-result">
                 No matching location found in Uganda.
             </div>
         `;
+
+        container.style.display =
+            "block";
 
         return;
     }
@@ -264,10 +349,92 @@ function displaySearchResults(
                 "search-result";
 
 
+            const properties =
+                place.properties || {};
+
+
+            const coordinates =
+                place.geometry &&
+                place.geometry.coordinates
+                    ? place.geometry.coordinates
+                    : null;
+
+
+            if (!coordinates) {
+
+                return;
+
+            }
+
+
+            const longitude =
+                parseFloat(
+                    coordinates[0]
+                );
+
+
+            const latitude =
+                parseFloat(
+                    coordinates[1]
+                );
+
+
+            // Build a readable name.
+
             const name =
-                place.name ||
-                place.display_name
-                    .split(",")[0];
+                properties.name ||
+                properties.city ||
+                properties.town ||
+                properties.village ||
+                properties.county ||
+                "Unknown location";
+
+
+            // Build address.
+
+            const addressParts = [];
+
+
+            if (properties.street) {
+
+                addressParts.push(
+                    properties.street
+                );
+
+            }
+
+
+            if (properties.city) {
+
+                addressParts.push(
+                    properties.city
+                );
+
+            }
+
+
+            if (properties.county) {
+
+                addressParts.push(
+                    properties.county
+                );
+
+            }
+
+
+            if (properties.state) {
+
+                addressParts.push(
+                    properties.state
+                );
+
+            }
+
+
+            const address =
+                addressParts.length > 0
+                    ? addressParts.join(", ")
+                    : "Uganda";
 
 
             item.innerHTML = `
@@ -277,9 +444,7 @@ function displaySearchResults(
                 </div>
 
                 <div class="search-result-address">
-                    ${escapeHTML(
-                        place.display_name
-                    )}
+                    ${escapeHTML(address)}
                 </div>
 
             `;
@@ -290,7 +455,16 @@ function displaySearchResults(
                 function () {
 
                     selectLocation(
-                        place,
+                        {
+                            name: name,
+
+                            address: address,
+
+                            lat: latitude,
+
+                            lon: longitude
+
+                        },
                         type
                     );
 
@@ -328,12 +502,10 @@ function selectLocation(
     const selectedPlace = {
 
         name:
-            place.name ||
-            place.display_name
-                .split(",")[0],
+            place.name,
 
         address:
-            place.display_name,
+            place.address,
 
         lat:
             latitude,
@@ -420,7 +592,7 @@ function selectLocation(
     }
 
 
-    // Center map
+    // Center map on selected location.
 
     map.setView(
         [
@@ -465,7 +637,7 @@ async function calculateRoute() {
     }
 
 
-    // Don't allow same place
+    // Don't allow same place.
 
     if (
         fromPlace.lat === toPlace.lat &&
@@ -487,7 +659,9 @@ async function calculateRoute() {
 
     try {
 
-        // OSRM route request
+        // ==================================================
+        // OSRM ROUTING
+        // ==================================================
 
         const url =
             `https://router.project-osrm.org/route/v1/driving/` +
@@ -506,7 +680,7 @@ async function calculateRoute() {
         if (!response.ok) {
 
             throw new Error(
-                "Routing service failed."
+                `Routing service failed: ${response.status}`
             );
 
         }
@@ -533,59 +707,51 @@ async function calculateRoute() {
             data.routes[0];
 
 
-        // Draw route
+        // ==================================================
+        // DRAW ROUTE
+        // ==================================================
 
         drawRoute(
             route.geometry
         );
 
 
-        // Distance
+        // ==================================================
+        // DISTANCE
+        // ==================================================
 
         const distanceKm =
             route.distance / 1000;
 
 
-        // Calculate initial bearing
+        // ==================================================
+        // BEARING
+        // ==================================================
+        //
+        // We calculate the initial direction from the
+        // starting point toward the destination.
+        //
+        // This gives:
+        //
+        // 0°   = North
+        // 90°  = East
+        // 180° = South
+        // 270° = West
+        //
+        // ==================================================
 
-        const coordinates =
-            route.geometry.coordinates;
-
-
-        let bearing;
-
-
-        if (coordinates.length >= 2) {
-
-            const first =
-                coordinates[0];
-
-            const second =
-                coordinates[1];
-
-
-            bearing =
-                calculateBearing(
-                    first[1],
-                    first[0],
-                    second[1],
-                    second[0]
-                );
-
-        } else {
-
-            bearing =
-                calculateBearing(
-                    fromPlace.lat,
-                    fromPlace.lon,
-                    toPlace.lat,
-                    toPlace.lon
-                );
-
-        }
+        const bearing =
+            calculateBearing(
+                fromPlace.lat,
+                fromPlace.lon,
+                toPlace.lat,
+                toPlace.lon
+            );
 
 
-        // Compass direction
+        // ==================================================
+        // COMPASS DIRECTION
+        // ==================================================
 
         const compass =
             getCompassDirection(
@@ -593,15 +759,28 @@ async function calculateRoute() {
             );
 
 
-        // East / West
+        // ==================================================
+        // EAST / WEST
+        // ==================================================
+        //
+        // Instead of assuming:
+        //
+        // 0° - 179° = East
+        //
+        // we compare the actual longitude.
+        //
+        // ==================================================
 
         const direction =
             getEastWest(
-                bearing
+                fromPlace,
+                toPlace
             );
 
 
-        // Display result
+        // ==================================================
+        // DISPLAY RESULT
+        // ==================================================
 
         displayResult(
             direction,
@@ -613,10 +792,14 @@ async function calculateRoute() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Route calculation error:",
+            error
+        );
+
 
         alert(
-            "Unable to calculate the route. Please try again."
+            "Unable to calculate the route. Please check your internet connection and try again."
         );
 
     } finally {
@@ -671,7 +854,7 @@ function drawRoute(
         ).addTo(map);
 
 
-    // Fit map around route
+    // Fit map around route.
 
     map.fitBounds(
         routeLine.getBounds(),
@@ -698,17 +881,27 @@ function calculateBearing(
 ) {
 
     const toRadians =
-        degrees =>
-            degrees *
-            Math.PI /
-            180;
+        function (degrees) {
+
+            return (
+                degrees *
+                Math.PI /
+                180
+            );
+
+        };
 
 
     const toDegrees =
-        radians =>
-            radians *
-            180 /
-            Math.PI;
+        function (radians) {
+
+            return (
+                radians *
+                180 /
+                Math.PI
+            );
+
+        };
 
 
     const φ1 =
@@ -765,12 +958,19 @@ function getCompassDirection(
     const directions = [
 
         "N",
+
         "NE",
+
         "E",
+
         "SE",
+
         "S",
+
         "SW",
+
         "W",
+
         "NW"
 
     ];
@@ -789,22 +989,49 @@ function getCompassDirection(
 // ======================================================
 // 14. EAST / WEST
 // ======================================================
+//
+// This determines whether the destination is east or west
+// of the starting location based on longitude.
+//
+// Example:
+//
+// From longitude: 32.5
+// To longitude:   33.5
+//
+// Destination is further east.
+//
+// Therefore: EASTBOUND
+//
+// ======================================================
 
 function getEastWest(
-    bearing
+    from,
+    to
 ) {
 
-    /*
-       0°   = North
-       90°  = East
-       180° = South
-       270° = West
-    */
+    const longitudeDifference =
+        to.lon - from.lon;
+
+
+    // Small tolerance for locations that are
+    // almost on the same longitude.
+
+    const tolerance =
+        0.0001;
 
 
     if (
-        bearing >= 0 &&
-        bearing < 180
+        Math.abs(longitudeDifference) <=
+        tolerance
+    ) {
+
+        return "NORTH/SOUTH";
+
+    }
+
+
+    if (
+        longitudeDifference > 0
     ) {
 
         return "EASTBOUND";
@@ -852,10 +1079,17 @@ function displayResult(
         compass;
 
 
+    // ==================================================
+    // DISTANCE
+    // ==================================================
+
     if (distanceKm < 1) {
 
         distanceValue.textContent =
-            `${(distanceKm * 1000).toFixed(0)} m`;
+            `${(
+                distanceKm *
+                1000
+            ).toFixed(0)} m`;
 
     } else {
 
@@ -865,19 +1099,21 @@ function displayResult(
     }
 
 
-    // Arrow
+    // ==================================================
+    // ARROW
+    // ==================================================
 
     directionArrow.textContent =
         getArrow(compass);
 
 
-    // Rotate arrow
-
     directionArrow.style.transform =
         `rotate(${bearing}deg)`;
 
 
-    // East styling
+    // ==================================================
+    // EASTBOUND STYLING
+    // ==================================================
 
     if (
         direction === "EASTBOUND"
@@ -896,9 +1132,14 @@ function displayResult(
 
     }
 
-    // West styling
 
-    else {
+    // ==================================================
+    // WESTBOUND STYLING
+    // ==================================================
+
+    else if (
+        direction === "WESTBOUND"
+    ) {
 
         directionResult.style.color =
             "#1266f1";
@@ -910,6 +1151,26 @@ function displayResult(
 
         directionArrow.style.color =
             "#1266f1";
+
+    }
+
+
+    // ==================================================
+    // NORTH / SOUTH
+    // ==================================================
+
+    else {
+
+        directionResult.style.color =
+            "#6b7280";
+
+
+        directionArrow.style.background =
+            "#f3f4f6";
+
+
+        directionArrow.style.color =
+            "#6b7280";
 
     }
 
@@ -945,7 +1206,10 @@ function getArrow(
     };
 
 
-    return arrows[compass];
+    return (
+        arrows[compass] ||
+        "↑"
+    );
 }
 
 
@@ -1017,6 +1281,11 @@ function clearMap() {
         "none";
 
 
+    fromResults.innerHTML = "";
+
+    toResults.innerHTML = "";
+
+
     map.setView(
         [1.3733, 32.2903],
         7
@@ -1071,3 +1340,20 @@ function escapeHTML(
 
     return div.innerHTML;
 }
+
+
+// ======================================================
+// 20. MAP RESIZE FIX
+// ======================================================
+// Helps when the map is inside a container whose size
+// changes after the page loads.
+// ======================================================
+
+setTimeout(
+    function () {
+
+        map.invalidateSize();
+
+    },
+    500
+);
