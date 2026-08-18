@@ -1,12 +1,4 @@
-// ======================================================
-// UGANDA EAST / WEST DIRECTION MAP
-// Complete replacement app.js
-// ======================================================
 
-
-// ======================================================
-// 1. INITIALIZE MAP
-// ======================================================
 
 const map = L.map("map").setView(
     [1.3733, 32.2903],
@@ -14,12 +6,6 @@ const map = L.map("map").setView(
 );
 
 
-// ======================================================
-// 2. MAP TILE LAYER
-// ======================================================
-// Using CARTO instead of the OpenStreetMap tile server.
-// This avoids the tile.openstreetmap.org timeout problem.
-// ======================================================
 
 L.tileLayer(
     "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
@@ -157,18 +143,7 @@ toInput.addEventListener(
 );
 
 
-// ======================================================
-// 7. PHOTON SEARCH
-// ======================================================
-// Photon is used instead of the Nominatim endpoint that
-// was timing out in your GitHub Pages deployment.
-//
-// Uganda bounding box:
-// West: 29.5
-// South: -1.5
-// East: 35.2
-// North: 4.3
-// ======================================================
+
 
 async function searchLocations(
     query,
