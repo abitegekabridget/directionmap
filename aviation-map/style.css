@@ -1,0 +1,716 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+/* ==========================================
+   NAVBAR
+========================================== */
+
+.navbar {
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    height: 68px;
+
+    background: white;
+
+    z-index: 2000;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 25px;
+
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.brand-icon {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 10px;
+
+    background: #1266f1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    color: white;
+}
+
+
+.brand-title {
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    color: #172033;
+}
+
+
+.brand-subtitle {
+
+    font-size: 12px;
+
+    color: #7a8496;
+
+    margin-top: 2px;
+}
+
+
+/* ==========================================
+   MAP
+========================================== */
+
+#map {
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100vh;
+
+    z-index: 1;
+}
+
+
+/* ==========================================
+   SEARCH CARD
+========================================== */
+
+.search-card {
+
+    position: absolute;
+
+    top: 90px;
+    left: 25px;
+
+    width: 390px;
+
+    background: white;
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    z-index: 1000;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+
+.card-title {
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #172033;
+}
+
+
+.card-subtitle {
+
+    font-size: 13px;
+
+    color: #7a8496;
+
+    margin-top: 4px;
+
+    margin-bottom: 20px;
+}
+
+
+/* ==========================================
+   LOCATION INPUT
+========================================== */
+
+.location-input {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+
+.input-icon {
+
+    width: 34px;
+    height: 34px;
+
+    min-width: 34px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-top: 22px;
+}
+
+
+.from-icon {
+
+    background: #1266f1;
+}
+
+
+.to-icon {
+
+    background: #e53935;
+}
+
+
+.input-wrapper {
+
+    position: relative;
+
+    width: 100%;
+}
+
+
+.input-wrapper label {
+
+    display: block;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #7a8496;
+
+    margin-bottom: 5px;
+}
+
+
+.input-wrapper input {
+
+    width: 100%;
+
+    height: 43px;
+
+    padding: 0 13px;
+
+    border: 1px solid #dfe3e8;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    color: #172033;
+
+    background: #fafbfc;
+}
+
+
+.input-wrapper input:focus {
+
+    border-color: #1266f1;
+
+    background: white;
+}
+
+
+/* ==========================================
+   SEARCH RESULTS
+========================================== */
+
+.search-results {
+
+    position: absolute;
+
+    top: 70px;
+
+    left: 0;
+
+    width: 100%;
+
+    background: white;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.18);
+
+    overflow: hidden;
+
+    display: none;
+
+    max-height: 250px;
+
+    overflow-y: auto;
+
+    z-index: 5000;
+}
+
+
+.search-result {
+
+    padding: 12px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+
+.search-result:hover {
+
+    background: #f3f6fa;
+}
+
+
+.search-result-name {
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+    color: #172033;
+}
+
+
+.search-result-address {
+
+    font-size: 11px;
+
+    color: #7a8496;
+
+    margin-top: 4px;
+
+    line-height: 1.4;
+}
+
+
+/* ==========================================
+   CALCULATE BUTTON
+========================================== */
+
+.calculate-btn {
+
+    width: 100%;
+
+    height: 48px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #1266f1;
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 17px;
+
+    transition: 0.2s;
+}
+
+
+.calculate-btn:hover {
+
+    background: #0954ce;
+
+    transform: translateY(-1px);
+}
+
+
+.calculate-btn:active {
+
+    transform: translateY(0);
+}
+
+
+/* ==========================================
+   CLEAR BUTTON
+========================================== */
+
+.clear-btn {
+
+    width: 100%;
+
+    margin-top: 8px;
+
+    height: 38px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #697386;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+
+.clear-btn:hover {
+
+    color: #e53935;
+}
+
+
+/* ==========================================
+   RESULT CARD
+========================================== */
+
+.result-card {
+
+    position: absolute;
+
+    left: 25px;
+
+    bottom: 25px;
+
+    width: 390px;
+
+    background: white;
+
+    border-radius: 14px;
+
+    z-index: 1000;
+
+    padding: 20px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+
+.hidden {
+
+    display: none !important;
+}
+
+
+.result-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+
+.result-label {
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #7a8496;
+
+    letter-spacing: 1px;
+}
+
+
+.direction-result {
+
+    font-size: 26px;
+
+    font-weight: 800;
+
+    margin-top: 4px;
+}
+
+
+.direction-arrow {
+
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+
+    background: #eef4ff;
+
+    color: #1266f1;
+
+    transition: transform 0.5s;
+}
+
+
+.route-name {
+
+    margin-top: 15px;
+
+    padding: 12px;
+
+    background: #f6f8fb;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #344054;
+}
+
+
+.route-arrow {
+
+    margin: 0 5px;
+
+    color: #1266f1;
+}
+
+
+/* ==========================================
+   DETAILS
+========================================== */
+
+.result-details {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+
+.detail {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.detail-icon {
+
+    font-size: 16px;
+}
+
+
+.detail-label {
+
+    font-size: 9px;
+
+    color: #8993a4;
+
+    font-weight: 700;
+}
+
+
+.detail-value {
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #172033;
+
+    margin-top: 2px;
+}
+
+
+/* ==========================================
+   LOADING
+========================================== */
+
+.loading {
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 3000;
+
+    background: white;
+
+    padding: 15px 20px;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.2);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.spinner {
+
+    width: 20px;
+    height: 20px;
+
+    border: 3px solid #e1e6ed;
+
+    border-top-color: #1266f1;
+
+    border-radius: 50%;
+
+    animation:
+        spin 0.8s linear infinite;
+}
+
+
+@keyframes spin {
+
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+    .navbar {
+
+        height: 60px;
+
+        padding: 0 15px;
+    }
+
+
+    .brand-title {
+
+        font-size: 15px;
+    }
+
+
+    .brand-subtitle {
+
+        font-size: 10px;
+    }
+
+
+    .search-card {
+
+        top: 75px;
+
+        left: 12px;
+
+        width:
+            calc(100% - 24px);
+
+        padding: 17px;
+    }
+
+
+    .result-card {
+
+        left: 12px;
+
+        bottom: 15px;
+
+        width:
+            calc(100% - 24px);
+    }
+
+
+    .result-details {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+
+    .direction-result {
+
+        font-size: 22px;
+    }
+
+}

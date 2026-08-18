@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Uganda Direction Map</title>
+
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <!-- Leaflet Routing Machine is NOT required -->
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================================
+         TOP NAVIGATION
+    ========================================== -->
+
+    <header class="navbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🧭
+            </div>
+
+            <div>
+                <div class="brand-title">
+                    Uganda Direction Map
+                </div>
+
+                <div class="brand-subtitle">
+                    East & West Bound
+                </div>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         MAP
+    ========================================== -->
+
+    <main>
+
+        <div id="map"></div>
+
+
+        <!-- =====================================
+             SEARCH CARD
+        ====================================== -->
+
+        <div class="search-card">
+
+            <div class="card-title">
+                Plan your journey
+            </div>
+
+            <div class="card-subtitle">
+                Search any location in Uganda
+            </div>
+
+
+            <!-- FROM -->
+
+            <div class="location-input">
+
+                <div class="input-icon from-icon">
+                    A
+                </div>
+
+                <div class="input-wrapper">
+
+                    <label for="fromInput">
+                        FROM
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fromInput"
+                        placeholder="Starting location"
+                        autocomplete="off"
+                    >
+
+                    <div
+                        id="fromResults"
+                        class="search-results">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TO -->
+
+            <div class="location-input">
+
+                <div class="input-icon to-icon">
+                    B
+                </div>
+
+                <div class="input-wrapper">
+
+                    <label for="toInput">
+                        TO
+                    </label>
+
+                    <input
+                        type="text"
+                        id="toInput"
+                        placeholder="Destination"
+                        autocomplete="off"
+                    >
+
+                    <div
+                        id="toResults"
+                        class="search-results">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CALCULATE -->
+
+            <button
+                id="calculateBtn"
+                class="calculate-btn">
+
+                <span>Calculate Direction</span>
+
+                <span>→</span>
+
+            </button>
+
+
+            <!-- CLEAR -->
+
+            <button
+                id="clearBtn"
+                class="clear-btn">
+
+                Clear Route
+
+            </button>
+
+        </div>
+
+
+        <!-- =====================================
+             RESULT CARD
+        ====================================== -->
+
+        <div
+            id="resultCard"
+            class="result-card hidden">
+
+            <div class="result-header">
+
+                <div>
+                    <div class="result-label">
+                        TRAVEL DIRECTION
+                    </div>
+
+                    <div
+                        id="directionResult"
+                        class="direction-result">
+
+                    </div>
+                </div>
+
+                <div
+                    id="directionArrow"
+                    class="direction-arrow">
+
+                    →
+
+                </div>
+
+            </div>
+
+
+            <div class="route-name">
+
+                <span id="fromName">
+                    -
+                </span>
+
+                <span class="route-arrow">
+                    →
+                </span>
+
+                <span id="toName">
+                    -
+                </span>
+
+            </div>
+
+
+            <div class="result-details">
+
+                <div class="detail">
+
+                    <div class="detail-icon">
+                        🧭
+                    </div>
+
+                    <div>
+                        <div class="detail-label">
+                            BEARING
+                        </div>
+
+                        <div
+                            id="bearingValue"
+                            class="detail-value">
+                            -
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-icon">
+                        📏
+                    </div>
+
+                    <div>
+                        <div class="detail-label">
+                            DISTANCE
+                        </div>
+
+                        <div
+                            id="distanceValue"
+                            class="detail-value">
+                            -
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-icon">
+                        🧭
+                    </div>
+
+                    <div>
+                        <div class="detail-label">
+                            COMPASS
+                        </div>
+
+                        <div
+                            id="compassValue"
+                            class="detail-value">
+                            -
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             LOADING
+        ====================================== -->
+
+        <div
+            id="loading"
+            class="loading hidden">
+
+            <div class="spinner"></div>
+
+            <span>
+                Calculating route...
+            </span>
+
+        </div>
+
+    </main>
+
+
+    <!-- Leaflet -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>
