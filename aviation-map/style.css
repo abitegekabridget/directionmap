@@ -856,4 +856,127 @@ body {
     line-height: 1.4;
 
     color: #8a94a6;
+}.hidden {
+    display: none !important;
+}
+
+
+/* Flight level result */
+
+.flight-level-card {
+    position: absolute;
+
+    left: 25px;
+    bottom: 25px;
+
+    width: 390px;
+
+    background: white;
+
+    border-radius: 14px;
+
+    z-index: 1000;
+
+    padding: 20px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+
+.flight-level-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.flight-level-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eaf2ff;
+
+    color: #1266f1;
+
+    font-size: 20px;
+}
+
+
+.flight-level-direction {
+    margin-top: 4px;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+
+.flight-level-message {
+    margin-top: 14px;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    color: #667085;
+}
+
+
+.flight-levels {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 14px;
+}
+
+
+.flight-level {
+    padding: 8px 11px;
+
+    border-radius: 7px;
+
+    background: #f8fbff;
+
+    border: 1px solid #cdddf5;
+
+    color: #1266f1;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.flight-level-note {
+    margin-top: 14px;
+
+    padding-top: 10px;
+
+    border-top: 1px solid #e5e7eb;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    color: #8a94a6;
+}
+
+
+@media (max-width: 700px) {
+
+    .flight-level-card {
+        left: 12px;
+        bottom: 15px;
+        width: calc(100% - 24px);
+    }
+
 }
