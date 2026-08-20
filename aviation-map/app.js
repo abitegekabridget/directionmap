@@ -4,7 +4,7 @@
 
 
 // ======================================================
-// 1. MAP INITIALIZATION
+// 1. INITIALIZE MAP
 // ======================================================
 
 const map = L.map("map").setView(
@@ -17,7 +17,7 @@ L.tileLayer(
     "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
     {
         attribution:
-            '&copy; OpenStreetMap contributors &copy; CARTO',
+            "&copy; OpenStreetMap contributors &copy; CARTO",
 
         subdomains: "abcd",
 
@@ -31,17 +31,14 @@ L.tileLayer(
 // ======================================================
 
 let fromPlace = null;
-
 let toPlace = null;
 
 let fromMarker = null;
-
 let toMarker = null;
 
 let routeLine = null;
 
 let fromSearchTimer = null;
-
 let toSearchTimer = null;
 
 
@@ -98,7 +95,9 @@ const loading =
     document.getElementById("loading");
 
 
-// Flight level elements
+// ======================================================
+// 4. FLIGHT LEVEL ELEMENTS
+// ======================================================
 
 const flightLevelCard =
     document.getElementById("flightLevelCard");
@@ -114,10 +113,10 @@ const flightLevels =
 
 
 // ======================================================
-// 4. INITIAL STATE
+// 5. INITIAL STATE
 // ======================================================
 
-// Hide result cards when page loads
+// Keep both result cards hidden when page loads.
 
 if (resultCard) {
     resultCard.classList.add("hidden");
@@ -129,181 +128,173 @@ if (flightLevelCard) {
 
 
 // ======================================================
-// 5. SWAP FROM / TO
+// 6. SWAP FROM / TO
 // ======================================================
 
-if (swapBtn) {
+swapBtn.addEventListener(
+    "click",
+    function () {
 
-    swapBtn.addEventListener(
-        "click",
-        function () {
+        const oldFromText =
+            fromInput.value;
 
-            // ------------------------------------------
-            // Save current values
-            // ------------------------------------------
-
-            const oldFromText =
-                fromInput.value;
-
-            const oldToText =
-                toInput.value;
+        const oldToText =
+            toInput.value;
 
 
-            const oldFromPlace =
-                fromPlace;
+        const oldFromPlace =
+            fromPlace;
 
-            const oldToPlace =
-                toPlace;
-
-
-            const oldFromMarker =
-                fromMarker;
-
-            const oldToMarker =
-                toMarker;
+        const oldToPlace =
+            toPlace;
 
 
-            // ------------------------------------------
-            // Swap input text
-            // ------------------------------------------
+        const oldFromMarker =
+            fromMarker;
 
-            fromInput.value =
-                oldToText;
-
-            toInput.value =
-                oldFromText;
+        const oldToMarker =
+            toMarker;
 
 
-            // ------------------------------------------
-            // Swap places
-            // ------------------------------------------
+        // ----------------------------------------------
+        // SWAP TEXT
+        // ----------------------------------------------
 
-            fromPlace =
-                oldToPlace;
+        fromInput.value =
+            oldToText;
 
-            toPlace =
-                oldFromPlace;
-
-
-            // ------------------------------------------
-            // Swap markers
-            // ------------------------------------------
-
-            fromMarker =
-                oldToMarker;
-
-            toMarker =
-                oldFromMarker;
+        toInput.value =
+            oldFromText;
 
 
-            // ------------------------------------------
-            // Update FROM marker popup
-            // ------------------------------------------
+        // ----------------------------------------------
+        // SWAP PLACES
+        // ----------------------------------------------
 
-            if (
-                fromMarker &&
-                fromPlace
-            ) {
+        fromPlace =
+            oldToPlace;
 
-                fromMarker.setPopupContent(
-                    `<strong>FROM</strong><br>
-                    ${escapeHTML(fromPlace.name)}`
-                );
-
-            }
+        toPlace =
+            oldFromPlace;
 
 
-            // ------------------------------------------
-            // Update TO marker popup
-            // ------------------------------------------
+        // ----------------------------------------------
+        // SWAP MARKERS
+        // ----------------------------------------------
 
-            if (
-                toMarker &&
-                toPlace
-            ) {
+        fromMarker =
+            oldToMarker;
 
-                toMarker.setPopupContent(
-                    `<strong>TO</strong><br>
-                    ${escapeHTML(toPlace.name)}`
-                );
-
-            }
+        toMarker =
+            oldFromMarker;
 
 
-            // ------------------------------------------
-            // Close search results
-            // ------------------------------------------
+        // ----------------------------------------------
+        // UPDATE FROM MARKER
+        // ----------------------------------------------
 
-            fromResults.style.display =
-                "none";
+        if (
+            fromMarker &&
+            fromPlace
+        ) {
 
-            toResults.style.display =
-                "none";
-
-            fromResults.innerHTML =
-                "";
-
-            toResults.innerHTML =
-                "";
-
-
-            // ------------------------------------------
-            // Remove old route
-            // ------------------------------------------
-
-            if (routeLine) {
-
-                map.removeLayer(
-                    routeLine
-                );
-
-                routeLine =
-                    null;
-
-            }
-
-
-            // ------------------------------------------
-            // Hide old results
-            // ------------------------------------------
-
-            resultCard.classList.add(
-                "hidden"
-            );
-
-            flightLevelCard.classList.add(
-                "hidden"
-            );
-
-
-            // ------------------------------------------
-            // Swap animation
-            // ------------------------------------------
-
-            swapBtn.classList.add(
-                "swapping"
-            );
-
-
-            setTimeout(
-                function () {
-
-                    swapBtn.classList.remove(
-                        "swapping"
-                    );
-
-                },
-                300
+            fromMarker.setPopupContent(
+                `<strong>FROM</strong><br>
+                ${escapeHTML(fromPlace.name)}`
             );
 
         }
-    );
 
-}
+
+        // ----------------------------------------------
+        // UPDATE TO MARKER
+        // ----------------------------------------------
+
+        if (
+            toMarker &&
+            toPlace
+        ) {
+
+            toMarker.setPopupContent(
+                `<strong>TO</strong><br>
+                ${escapeHTML(toPlace.name)}`
+            );
+
+        }
+
+
+        // ----------------------------------------------
+        // CLOSE SEARCH RESULTS
+        // ----------------------------------------------
+
+        fromResults.style.display =
+            "none";
+
+        toResults.style.display =
+            "none";
+
+        fromResults.innerHTML =
+            "";
+
+        toResults.innerHTML =
+            "";
+
+
+        // ----------------------------------------------
+        // REMOVE OLD ROUTE
+        // ----------------------------------------------
+
+        if (routeLine) {
+
+            map.removeLayer(
+                routeLine
+            );
+
+            routeLine =
+                null;
+
+        }
+
+
+        // ----------------------------------------------
+        // HIDE RESULTS
+        // ----------------------------------------------
+
+        if (resultCard) {
+            resultCard.classList.add("hidden");
+        }
+
+        if (flightLevelCard) {
+            flightLevelCard.classList.add("hidden");
+        }
+
+
+        // ----------------------------------------------
+        // SWAP ANIMATION
+        // ----------------------------------------------
+
+        swapBtn.classList.add(
+            "swapping"
+        );
+
+
+        setTimeout(
+            function () {
+
+                swapBtn.classList.remove(
+                    "swapping"
+                );
+
+            },
+            300
+        );
+
+    }
+);
 
 
 // ======================================================
-// 6. SEARCH FROM LOCATION
+// 7. FROM SEARCH
 // ======================================================
 
 fromInput.addEventListener(
@@ -334,7 +325,7 @@ fromInput.addEventListener(
 
 
 // ======================================================
-// 7. SEARCH TO LOCATION
+// 8. TO SEARCH
 // ======================================================
 
 toInput.addEventListener(
@@ -365,7 +356,7 @@ toInput.addEventListener(
 
 
 // ======================================================
-// 8. SEARCH LOCATIONS
+// 9. SEARCH LOCATIONS
 // ======================================================
 
 async function searchLocations(
@@ -378,9 +369,9 @@ async function searchLocations(
         query.trim();
 
 
-    // ------------------------------------------
-    // Ignore very short searches
-    // ------------------------------------------
+    // ----------------------------------------------
+    // EMPTY SEARCH
+    // ----------------------------------------------
 
     if (query.length < 2) {
 
@@ -395,9 +386,9 @@ async function searchLocations(
     }
 
 
-    // ------------------------------------------
-    // Show loading
-    // ------------------------------------------
+    // ----------------------------------------------
+    // SEARCH MESSAGE
+    // ----------------------------------------------
 
     resultContainer.innerHTML = `
         <div class="search-result">
@@ -405,16 +396,11 @@ async function searchLocations(
         </div>
     `;
 
-
     resultContainer.style.display =
         "block";
 
 
     try {
-
-        // --------------------------------------
-        // Search parameters
-        // --------------------------------------
 
         const params =
             new URLSearchParams({
@@ -430,10 +416,6 @@ async function searchLocations(
 
             });
 
-
-        // --------------------------------------
-        // Photon API
-        // --------------------------------------
 
         const response =
             await fetch(
@@ -458,9 +440,9 @@ async function searchLocations(
             data.features || [];
 
 
-        // --------------------------------------
-        // Filter Uganda
-        // --------------------------------------
+        // ----------------------------------------------
+        // FILTER TO UGANDA
+        // ----------------------------------------------
 
         const results =
             features.filter(
@@ -531,7 +513,7 @@ async function searchLocations(
 
 
 // ======================================================
-// 9. DISPLAY SEARCH RESULTS
+// 10. DISPLAY SEARCH RESULTS
 // ======================================================
 
 function displaySearchResults(
@@ -544,10 +526,6 @@ function displaySearchResults(
         "";
 
 
-    // ------------------------------------------
-    // No results
-    // ------------------------------------------
-
     if (
         !results ||
         results.length === 0
@@ -559,7 +537,6 @@ function displaySearchResults(
             </div>
         `;
 
-
         container.style.display =
             "block";
 
@@ -568,17 +545,11 @@ function displaySearchResults(
     }
 
 
-    // ------------------------------------------
-    // Display each result
-    // ------------------------------------------
-
     results.forEach(
         function (place) {
 
             const item =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             item.className =
@@ -597,9 +568,7 @@ function displaySearchResults(
 
 
             if (!coordinates) {
-
                 return;
-
             }
 
 
@@ -615,9 +584,9 @@ function displaySearchResults(
                 );
 
 
-            // ----------------------------------
-            // Location name
-            // ----------------------------------
+            // ------------------------------------------
+            // LOCATION NAME
+            // ------------------------------------------
 
             const name =
                 properties.name ||
@@ -628,11 +597,12 @@ function displaySearchResults(
                 "Unknown location";
 
 
-            // ----------------------------------
-            // Address
-            // ----------------------------------
+            // ------------------------------------------
+            // ADDRESS
+            // ------------------------------------------
 
-            const addressParts = [];
+            const addressParts =
+                [];
 
 
             if (properties.street) {
@@ -677,9 +647,9 @@ function displaySearchResults(
                     : "Uganda";
 
 
-            // ----------------------------------
-            // Result HTML
-            // ----------------------------------
+            // ------------------------------------------
+            // DISPLAY RESULT
+            // ------------------------------------------
 
             item.innerHTML = `
 
@@ -694,9 +664,9 @@ function displaySearchResults(
             `;
 
 
-            // ----------------------------------
-            // Select location
-            // ----------------------------------
+            // ------------------------------------------
+            // CLICK RESULT
+            // ------------------------------------------
 
             item.addEventListener(
                 "click",
@@ -704,17 +674,13 @@ function displaySearchResults(
 
                     selectLocation(
                         {
-                            name:
-                                name,
+                            name: name,
 
-                            address:
-                                address,
+                            address: address,
 
-                            lat:
-                                latitude,
+                            lat: latitude,
 
-                            lon:
-                                longitude
+                            lon: longitude
 
                         },
                         type
@@ -739,7 +705,7 @@ function displaySearchResults(
 
 
 // ======================================================
-// 10. SELECT LOCATION
+// 11. SELECT LOCATION
 // ======================================================
 
 function selectLocation(
@@ -794,8 +760,6 @@ function selectLocation(
             "none";
 
 
-        // Remove previous marker
-
         if (fromMarker) {
 
             map.removeLayer(
@@ -804,8 +768,6 @@ function selectLocation(
 
         }
 
-
-        // Create FROM marker
 
         fromMarker =
             L.marker(
@@ -843,8 +805,6 @@ function selectLocation(
             "none";
 
 
-        // Remove previous marker
-
         if (toMarker) {
 
             map.removeLayer(
@@ -853,8 +813,6 @@ function selectLocation(
 
         }
 
-
-        // Create TO marker
 
         toMarker =
             L.marker(
@@ -874,9 +832,22 @@ function selectLocation(
     }
 
 
-    // ==================================================
-    // Center map
-    // ==================================================
+    // ----------------------------------------------
+    // HIDE OLD RESULTS
+    // ----------------------------------------------
+
+    if (resultCard) {
+        resultCard.classList.add("hidden");
+    }
+
+    if (flightLevelCard) {
+        flightLevelCard.classList.add("hidden");
+    }
+
+
+    // ----------------------------------------------
+    // CENTER MAP
+    // ----------------------------------------------
 
     map.setView(
         [
@@ -890,7 +861,7 @@ function selectLocation(
 
 
 // ======================================================
-// 11. CALCULATE ROUTE BUTTON
+// 12. CALCULATE ROUTE BUTTON
 // ======================================================
 
 calculateBtn.addEventListener(
@@ -900,14 +871,14 @@ calculateBtn.addEventListener(
 
 
 // ======================================================
-// 12. CALCULATE ROUTE
+// 13. CALCULATE ROUTE
 // ======================================================
 
 async function calculateRoute() {
 
-    // ------------------------------------------
-    // Validate FROM
-    // ------------------------------------------
+    // ----------------------------------------------
+    // CHECK FROM
+    // ----------------------------------------------
 
     if (!fromPlace) {
 
@@ -920,9 +891,9 @@ async function calculateRoute() {
     }
 
 
-    // ------------------------------------------
-    // Validate TO
-    // ------------------------------------------
+    // ----------------------------------------------
+    // CHECK TO
+    // ----------------------------------------------
 
     if (!toPlace) {
 
@@ -935,9 +906,9 @@ async function calculateRoute() {
     }
 
 
-    // ------------------------------------------
-    // Same location
-    // ------------------------------------------
+    // ----------------------------------------------
+    // SAME LOCATION
+    // ----------------------------------------------
 
     if (
         fromPlace.lat === toPlace.lat &&
@@ -953,13 +924,24 @@ async function calculateRoute() {
     }
 
 
-    // ------------------------------------------
-    // Show loading
-    // ------------------------------------------
+    // ----------------------------------------------
+    // SHOW LOADING
+    // ----------------------------------------------
 
     loading.classList.remove(
         "hidden"
     );
+
+
+    // Hide previous results while calculating.
+
+    if (flightLevelCard) {
+        flightLevelCard.classList.add("hidden");
+    }
+
+    if (resultCard) {
+        resultCard.classList.add("hidden");
+    }
 
 
     try {
@@ -970,18 +952,13 @@ async function calculateRoute() {
 
         const url =
             `https://router.project-osrm.org/route/v1/driving/` +
-
             `${fromPlace.lon},${fromPlace.lat};` +
-
             `${toPlace.lon},${toPlace.lat}` +
-
             `?overview=full&geometries=geojson`;
 
 
         const response =
-            await fetch(
-                url
-            );
+            await fetch(url);
 
 
         if (!response.ok) {
@@ -997,9 +974,9 @@ async function calculateRoute() {
             await response.json();
 
 
-        // ------------------------------------------
-        // Validate route
-        // ------------------------------------------
+        // ----------------------------------------------
+        // CHECK ROUTE
+        // ----------------------------------------------
 
         if (
             data.code !== "Ok" ||
@@ -1070,14 +1047,43 @@ async function calculateRoute() {
 
 
         // ==================================================
-        // DISPLAY EVERYTHING
+        // DISPLAY FLIGHT LEVEL
         // ==================================================
 
-        displayResult(
-            direction,
-            compass,
-            bearing,
-            distanceKm
+        displayFlightLevelReminder(
+            direction
+        );
+
+
+        // ==================================================
+        // OPTIONAL NORMAL RESULT
+        // ==================================================
+
+        /*
+            The normal Travel Direction card is intentionally
+            kept hidden.
+
+            If you want it later, change this function call
+            to displayResult(...).
+        */
+
+        if (resultCard) {
+            resultCard.classList.add("hidden");
+        }
+
+
+        // ==================================================
+        // UPDATE FLIGHT LEVEL
+        // ==================================================
+
+        console.log(
+            "Route calculated:",
+            {
+                direction: direction,
+                compass: compass,
+                bearing: bearing,
+                distanceKm: distanceKm
+            }
         );
 
 
@@ -1087,6 +1093,13 @@ async function calculateRoute() {
             "Route calculation error:",
             error
         );
+
+
+        // Hide flight-level card if calculation fails.
+
+        if (flightLevelCard) {
+            flightLevelCard.classList.add("hidden");
+        }
 
 
         alert(
@@ -1105,14 +1118,16 @@ async function calculateRoute() {
 
 
 // ======================================================
-// 13. DRAW ROUTE
+// 14. DRAW ROUTE
 // ======================================================
 
 function drawRoute(
     geometry
 ) {
 
-    // Remove old route
+    // ----------------------------------------------
+    // REMOVE OLD ROUTE
+    // ----------------------------------------------
 
     if (routeLine) {
 
@@ -1123,7 +1138,9 @@ function drawRoute(
     }
 
 
-    // Convert coordinates
+    // ----------------------------------------------
+    // CONVERT COORDINATES
+    // ----------------------------------------------
 
     const latLngs =
         geometry.coordinates.map(
@@ -1138,7 +1155,9 @@ function drawRoute(
         );
 
 
-    // Draw route
+    // ----------------------------------------------
+    // CREATE LINE
+    // ----------------------------------------------
 
     routeLine =
         L.polyline(
@@ -1153,7 +1172,9 @@ function drawRoute(
         ).addTo(map);
 
 
-    // Fit map
+    // ----------------------------------------------
+    // FIT MAP
+    // ----------------------------------------------
 
     map.fitBounds(
         routeLine.getBounds(),
@@ -1169,7 +1190,7 @@ function drawRoute(
 
 
 // ======================================================
-// 14. BEARING CALCULATION
+// 15. BEARING CALCULATION
 // ======================================================
 
 function calculateBearing(
@@ -1203,38 +1224,50 @@ function calculateBearing(
         };
 
 
-    const φ1 =
+    const phi1 =
         toRadians(
             lat1
         );
 
 
-    const φ2 =
+    const phi2 =
         toRadians(
             lat2
         );
 
 
-    const Δλ =
+    const deltaLambda =
         toRadians(
             lon2 - lon1
         );
 
 
     const y =
-        Math.sin(Δλ) *
-        Math.cos(φ2);
+        Math.sin(
+            deltaLambda
+        ) *
+        Math.cos(
+            phi2
+        );
 
 
     const x =
-        Math.cos(φ1) *
-        Math.sin(φ2)
-
+        Math.cos(
+            phi1
+        ) *
+        Math.sin(
+            phi2
+        )
         -
-
-        Math.sin(φ1) *
-        Math.cos(φ2) *
-        Math.cos(Δλ);
+        Math.sin(
+            phi1
+        ) *
+        Math.cos(
+            phi2
+        ) *
+        Math.cos(
+            deltaLambda
+        );
 
 
     let bearing =
@@ -1259,7 +1292,7 @@ function calculateBearing(
 
 
 // ======================================================
-// 15. COMPASS DIRECTION
+// 16. COMPASS DIRECTION
 // ======================================================
 
 function getCompassDirection(
@@ -1269,19 +1302,12 @@ function getCompassDirection(
     const directions = [
 
         "N",
-
         "NE",
-
         "E",
-
         "SE",
-
         "S",
-
         "SW",
-
         "W",
-
         "NW"
 
     ];
@@ -1293,13 +1319,15 @@ function getCompassDirection(
         ) % 8;
 
 
-    return directions[index];
+    return directions[
+        index
+    ];
 
 }
 
 
 // ======================================================
-// 16. EAST / WEST
+// 17. EAST / WEST
 // ======================================================
 
 function getEastWest(
@@ -1316,7 +1344,7 @@ function getEastWest(
         0.0001;
 
 
-    // Almost same longitude
+    // Same longitude
 
     if (
         Math.abs(
@@ -1329,7 +1357,7 @@ function getEastWest(
     }
 
 
-    // Destination east
+    // Destination is east
 
     if (
         longitudeDifference > 0
@@ -1340,7 +1368,7 @@ function getEastWest(
     }
 
 
-    // Destination west
+    // Destination is west
 
     return "WESTBOUND";
 
@@ -1348,32 +1376,24 @@ function getEastWest(
 
 
 // ======================================================
-// 17. FLIGHT LEVEL REMINDER
+// 18. FLIGHT LEVEL REMINDER
 // ======================================================
 
 function displayFlightLevelReminder(
     direction
 ) {
 
-    // Safety check
+    // Make sure the element exists.
 
-    if (
-        !flightLevelCard ||
-        !flightLevelDirection ||
-        !flightLevelMessage ||
-        !flightLevels
-    ) {
+    if (!flightLevelCard) {
+
+        console.error(
+            "flightLevelCard was not found in HTML."
+        );
 
         return;
 
     }
-
-
-    // Always show card after route calculation
-
-    flightLevelCard.classList.remove(
-        "hidden"
-    );
 
 
     // ==================================================
@@ -1383,6 +1403,11 @@ function displayFlightLevelReminder(
     if (
         direction === "EASTBOUND"
     ) {
+
+        flightLevelCard.classList.remove(
+            "hidden"
+        );
+
 
         flightLevelDirection.textContent =
             "EASTBOUND — ODD LEVELS";
@@ -1420,6 +1445,9 @@ function displayFlightLevelReminder(
 
         `;
 
+
+        return;
+
     }
 
 
@@ -1427,9 +1455,14 @@ function displayFlightLevelReminder(
     // WESTBOUND
     // ==================================================
 
-    else if (
+    if (
         direction === "WESTBOUND"
     ) {
+
+        flightLevelCard.classList.remove(
+            "hidden"
+        );
+
 
         flightLevelDirection.textContent =
             "WESTBOUND — EVEN LEVELS";
@@ -1467,6 +1500,9 @@ function displayFlightLevelReminder(
 
         `;
 
+
+        return;
+
     }
 
 
@@ -1474,32 +1510,22 @@ function displayFlightLevelReminder(
     // NORTH / SOUTH
     // ==================================================
 
-    else {
-
-        flightLevelDirection.textContent =
-            "NORTH / SOUTH";
-
-
-        flightLevelDirection.style.color =
-            "#6b7280";
-
-
-        flightLevelMessage.textContent =
-            "This route is primarily north/south. The east/west semicircular reminder does not directly apply.";
-
-
-        flightLevels.innerHTML =
-            "";
-
-    }
-
+    flightLevelCard.classList.add(
+        "hidden"
+    );
 
 }
 
 
 // ======================================================
-// 18. DISPLAY RESULT
+// 19. OPTIONAL DISPLAY RESULT
 // ======================================================
+//
+// This function is kept in the code in case you want
+// the Travel Direction card again later.
+//
+// Currently calculateRoute() does NOT call it.
+//
 
 function displayResult(
     direction,
@@ -1508,47 +1534,39 @@ function displayResult(
     distanceKm
 ) {
 
-    // ------------------------------------------
-    // Show result card
-    // ------------------------------------------
+    if (!resultCard) {
+        return;
+    }
+
 
     resultCard.classList.remove(
         "hidden"
     );
 
 
-    // ------------------------------------------
-    // Flight level reminder
-    // ------------------------------------------
+    if (directionResult) {
 
-    displayFlightLevelReminder(
-        direction
-    );
+        directionResult.textContent =
+            direction;
 
-
-    // ------------------------------------------
-    // Direction
-    // ------------------------------------------
-
-    directionResult.textContent =
-        direction;
+    }
 
 
-    // ------------------------------------------
-    // Locations
-    // ------------------------------------------
+    if (fromName) {
 
-    fromName.textContent =
-        fromPlace.name;
+        fromName.textContent =
+            fromPlace.name;
 
-
-    toName.textContent =
-        toPlace.name;
+    }
 
 
-    // ------------------------------------------
-    // Bearing
-    // ------------------------------------------
+    if (toName) {
+
+        toName.textContent =
+            toPlace.name;
+
+    }
+
 
     if (bearingValue) {
 
@@ -1558,10 +1576,6 @@ function displayResult(
     }
 
 
-    // ------------------------------------------
-    // Compass
-    // ------------------------------------------
-
     if (compassValue) {
 
         compassValue.textContent =
@@ -1570,47 +1584,40 @@ function displayResult(
     }
 
 
-    // ------------------------------------------
-    // Distance
-    // ------------------------------------------
+    if (distanceValue) {
 
-    if (
-        distanceKm < 1
-    ) {
+        if (distanceKm < 1) {
 
-        distanceValue.textContent =
-            `${(
-                distanceKm *
-                1000
-            ).toFixed(0)} m`;
+            distanceValue.textContent =
+                `${(
+                    distanceKm * 1000
+                ).toFixed(0)} m`;
 
-    }
+        } else {
 
-    else {
+            distanceValue.textContent =
+                `${distanceKm.toFixed(1)} km`;
 
-        distanceValue.textContent =
-            `${distanceKm.toFixed(1)} km`;
+        }
 
     }
 
 
-    // ------------------------------------------
-    // Arrow
-    // ------------------------------------------
+    if (directionArrow) {
 
-    directionArrow.textContent =
-        getArrow(
-            compass
-        );
+        directionArrow.textContent =
+            getArrow(compass);
 
 
-    directionArrow.style.transform =
-        `rotate(${bearing}deg)`;
+        directionArrow.style.transform =
+            `rotate(${bearing}deg)`;
+
+    }
 
 
-    // ==================================================
-    // EASTBOUND STYLE
-    // ==================================================
+    // ----------------------------------------------
+    // EASTBOUND
+    // ----------------------------------------------
 
     if (
         direction === "EASTBOUND"
@@ -1619,10 +1626,8 @@ function displayResult(
         directionResult.style.color =
             "#159447";
 
-
         directionArrow.style.background =
             "#e9f8ef";
-
 
         directionArrow.style.color =
             "#159447";
@@ -1630,9 +1635,9 @@ function displayResult(
     }
 
 
-    // ==================================================
-    // WESTBOUND STYLE
-    // ==================================================
+    // ----------------------------------------------
+    // WESTBOUND
+    // ----------------------------------------------
 
     else if (
         direction === "WESTBOUND"
@@ -1641,10 +1646,8 @@ function displayResult(
         directionResult.style.color =
             "#1266f1";
 
-
         directionArrow.style.background =
             "#edf4ff";
-
 
         directionArrow.style.color =
             "#1266f1";
@@ -1652,19 +1655,17 @@ function displayResult(
     }
 
 
-    // ==================================================
+    // ----------------------------------------------
     // NORTH / SOUTH
-    // ==================================================
+    // ----------------------------------------------
 
     else {
 
         directionResult.style.color =
             "#6b7280";
 
-
         directionArrow.style.background =
             "#f3f4f6";
-
 
         directionArrow.style.color =
             "#6b7280";
@@ -1675,7 +1676,7 @@ function displayResult(
 
 
 // ======================================================
-// 19. ARROW
+// 20. ARROW
 // ======================================================
 
 function getArrow(
@@ -1712,7 +1713,7 @@ function getArrow(
 
 
 // ======================================================
-// 20. CLEAR EVERYTHING
+// 21. CLEAR EVERYTHING
 // ======================================================
 
 clearBtn.addEventListener(
@@ -1723,20 +1724,17 @@ clearBtn.addEventListener(
 
 function clearMap() {
 
-    // ------------------------------------------
-    // Reset locations
-    // ------------------------------------------
+    // ----------------------------------------------
+    // RESET PLACES
+    // ----------------------------------------------
 
-    fromPlace =
-        null;
-
-    toPlace =
-        null;
+    fromPlace = null;
+    toPlace = null;
 
 
-    // ------------------------------------------
-    // Clear inputs
-    // ------------------------------------------
+    // ----------------------------------------------
+    // RESET INPUTS
+    // ----------------------------------------------
 
     fromInput.value =
         "";
@@ -1745,9 +1743,9 @@ function clearMap() {
         "";
 
 
-    // ------------------------------------------
-    // Remove FROM marker
-    // ------------------------------------------
+    // ----------------------------------------------
+    // REMOVE FROM MARKER
+    // ----------------------------------------------
 
     if (fromMarker) {
 
@@ -1761,9 +1759,9 @@ function clearMap() {
     }
 
 
-    // ------------------------------------------
-    // Remove TO marker
-    // ------------------------------------------
+    // ----------------------------------------------
+    // REMOVE TO MARKER
+    // ----------------------------------------------
 
     if (toMarker) {
 
@@ -1777,9 +1775,9 @@ function clearMap() {
     }
 
 
-    // ------------------------------------------
-    // Remove route
-    // ------------------------------------------
+    // ----------------------------------------------
+    // REMOVE ROUTE
+    // ----------------------------------------------
 
     if (routeLine) {
 
@@ -1793,23 +1791,35 @@ function clearMap() {
     }
 
 
-    // ------------------------------------------
-    // Hide cards
-    // ------------------------------------------
+    // ----------------------------------------------
+    // HIDE RESULT CARD
+    // ----------------------------------------------
 
-    resultCard.classList.add(
-        "hidden"
-    );
+    if (resultCard) {
+
+        resultCard.classList.add(
+            "hidden"
+        );
+
+    }
 
 
-    flightLevelCard.classList.add(
-        "hidden"
-    );
+    // ----------------------------------------------
+    // HIDE FLIGHT LEVEL CARD
+    // ----------------------------------------------
+
+    if (flightLevelCard) {
+
+        flightLevelCard.classList.add(
+            "hidden"
+        );
+
+    }
 
 
-    // ------------------------------------------
-    // Clear search results
-    // ------------------------------------------
+    // ----------------------------------------------
+    // CLOSE SEARCH RESULTS
+    // ----------------------------------------------
 
     fromResults.style.display =
         "none";
@@ -1825,9 +1835,9 @@ function clearMap() {
         "";
 
 
-    // ------------------------------------------
-    // Reset map
-    // ------------------------------------------
+    // ----------------------------------------------
+    // RESET MAP
+    // ----------------------------------------------
 
     map.setView(
         [
@@ -1841,7 +1851,7 @@ function clearMap() {
 
 
 // ======================================================
-// 21. CLOSE SEARCH RESULTS
+// 22. CLOSE SEARCH RESULTS
 // ======================================================
 
 document.addEventListener(
@@ -1867,7 +1877,7 @@ document.addEventListener(
 
 
 // ======================================================
-// 22. ESCAPE HTML
+// 23. ESCAPE HTML
 // ======================================================
 
 function escapeHTML(
@@ -1890,7 +1900,7 @@ function escapeHTML(
 
 
 // ======================================================
-// 23. MAP RESIZE FIX
+// 24. MAP RESIZE FIX
 // ======================================================
 
 setTimeout(
