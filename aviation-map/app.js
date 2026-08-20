@@ -89,6 +89,17 @@ const compassValue =
 
 const loading =
     document.getElementById("loading");
+const flightLevelCard =
+    document.getElementById("flightLevelCard");
+
+const flightLevelDirection =
+    document.getElementById("flightLevelDirection");
+
+const flightLevelMessage =
+    document.getElementById("flightLevelMessage");
+
+const flightLevels =
+    document.getElementById("flightLevels");
 
 
 
@@ -920,7 +931,79 @@ async function calculateRoute() {
                 toPlace
             );
 
+// ======================================================
+// FLIGHT LEVEL REMINDER
+// ======================================================
 
+function displayFlightLevelReminder(direction) {
+
+    // Make sure the card is visible
+    flightLevelCard.classList.remove("hidden");
+
+
+    // ==================================================
+    // EASTBOUND
+    // ==================================================
+
+    if (direction === "EASTBOUND") {
+
+        flightLevelDirection.textContent =
+            "EASTBOUND — ODD LEVELS";
+
+        flightLevelDirection.style.color =
+            "#159447";
+
+        flightLevelMessage.textContent =
+            "Eastbound traffic is associated with odd flight levels under the applicable semicircular rule.";
+
+        flightLevels.innerHTML = `
+            <span class="flight-level">FL 110</span>
+            <span class="flight-level">FL 130</span>
+            <span class="flight-level">FL 150</span>
+            <span class="flight-level">FL 170</span>
+            <span class="flight-level">FL 190</span>
+        `;
+
+    }
+
+
+    // ==================================================
+    // WESTBOUND
+    // ==================================================
+
+    else if (direction === "WESTBOUND") {
+
+        flightLevelDirection.textContent =
+            "WESTBOUND — EVEN LEVELS";
+
+        flightLevelDirection.style.color =
+            "#1266f1";
+
+        flightLevelMessage.textContent =
+            "Westbound traffic is associated with even flight levels under the applicable semicircular rule.";
+
+        flightLevels.innerHTML = `
+            <span class="flight-level">FL 120</span>
+            <span class="flight-level">FL 140</span>
+            <span class="flight-level">FL 160</span>
+            <span class="flight-level">FL 180</span>
+            <span class="flight-level">FL 200</span>
+        `;
+
+    }
+
+
+    // ==================================================
+    // OTHER DIRECTION
+    // ==================================================
+
+    else {
+
+        flightLevelCard.classList.add("hidden");
+
+    }
+
+}
         // ==================================================
         // DISPLAY RESULT
         // ==================================================
@@ -1200,7 +1283,9 @@ function displayResult(
     resultCard.classList.remove(
         "hidden"
     );
-
+displayFlightLevelReminder(
+    direction
+);
 
     directionResult.textContent =
         direction;
