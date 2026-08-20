@@ -116,8 +116,6 @@ const flightLevels =
 // 5. INITIAL STATE
 // ======================================================
 
-// Keep both result cards hidden when page loads.
-
 if (resultCard) {
     resultCard.classList.add("hidden");
 }
@@ -131,228 +129,227 @@ if (flightLevelCard) {
 // 6. SWAP FROM / TO
 // ======================================================
 
-swapBtn.addEventListener(
-    "click",
-    function () {
+if (swapBtn) {
 
-        const oldFromText =
-            fromInput.value;
+    swapBtn.addEventListener(
+        "click",
+        function () {
 
-        const oldToText =
-            toInput.value;
+            const oldFromText =
+                fromInput.value;
 
-
-        const oldFromPlace =
-            fromPlace;
-
-        const oldToPlace =
-            toPlace;
+            const oldToText =
+                toInput.value;
 
 
-        const oldFromMarker =
-            fromMarker;
+            const oldFromPlace =
+                fromPlace;
 
-        const oldToMarker =
-            toMarker;
-
-
-        // ----------------------------------------------
-        // SWAP TEXT
-        // ----------------------------------------------
-
-        fromInput.value =
-            oldToText;
-
-        toInput.value =
-            oldFromText;
+            const oldToPlace =
+                toPlace;
 
 
-        // ----------------------------------------------
-        // SWAP PLACES
-        // ----------------------------------------------
+            const oldFromMarker =
+                fromMarker;
 
-        fromPlace =
-            oldToPlace;
-
-        toPlace =
-            oldFromPlace;
+            const oldToMarker =
+                toMarker;
 
 
-        // ----------------------------------------------
-        // SWAP MARKERS
-        // ----------------------------------------------
+            // ------------------------------------------
+            // SWAP TEXT
+            // ------------------------------------------
 
-        fromMarker =
-            oldToMarker;
+            fromInput.value =
+                oldToText;
 
-        toMarker =
-            oldFromMarker;
-
-
-        // ----------------------------------------------
-        // UPDATE FROM MARKER
-        // ----------------------------------------------
-
-        if (
-            fromMarker &&
-            fromPlace
-        ) {
-
-            fromMarker.setPopupContent(
-                `<strong>FROM</strong><br>
-                ${escapeHTML(fromPlace.name)}`
-            );
-
-        }
+            toInput.value =
+                oldFromText;
 
 
-        // ----------------------------------------------
-        // UPDATE TO MARKER
-        // ----------------------------------------------
+            // ------------------------------------------
+            // SWAP PLACES
+            // ------------------------------------------
 
-        if (
-            toMarker &&
-            toPlace
-        ) {
+            fromPlace =
+                oldToPlace;
 
-            toMarker.setPopupContent(
-                `<strong>TO</strong><br>
-                ${escapeHTML(toPlace.name)}`
-            );
-
-        }
+            toPlace =
+                oldFromPlace;
 
 
-        // ----------------------------------------------
-        // CLOSE SEARCH RESULTS
-        // ----------------------------------------------
+            // ------------------------------------------
+            // SWAP MARKERS
+            // ------------------------------------------
 
-        fromResults.style.display =
-            "none";
+            fromMarker =
+                oldToMarker;
 
-        toResults.style.display =
-            "none";
-
-        fromResults.innerHTML =
-            "";
-
-        toResults.innerHTML =
-            "";
+            toMarker =
+                oldFromMarker;
 
 
-        // ----------------------------------------------
-        // REMOVE OLD ROUTE
-        // ----------------------------------------------
+            // ------------------------------------------
+            // UPDATE FROM MARKER
+            // ------------------------------------------
 
-        if (routeLine) {
+            if (
+                fromMarker &&
+                fromPlace
+            ) {
 
-            map.removeLayer(
-                routeLine
-            );
-
-            routeLine =
-                null;
-
-        }
-
-
-        // ----------------------------------------------
-        // HIDE RESULTS
-        // ----------------------------------------------
-
-        if (resultCard) {
-            resultCard.classList.add("hidden");
-        }
-
-        if (flightLevelCard) {
-            flightLevelCard.classList.add("hidden");
-        }
-
-
-        // ----------------------------------------------
-        // SWAP ANIMATION
-        // ----------------------------------------------
-
-        swapBtn.classList.add(
-            "swapping"
-        );
-
-
-        setTimeout(
-            function () {
-
-                swapBtn.classList.remove(
-                    "swapping"
+                fromMarker.setPopupContent(
+                    `<strong>FROM</strong><br>
+                    ${escapeHTML(fromPlace.name)}`
                 );
 
-            },
-            300
-        );
+            }
 
-    }
-);
+
+            // ------------------------------------------
+            // UPDATE TO MARKER
+            // ------------------------------------------
+
+            if (
+                toMarker &&
+                toPlace
+            ) {
+
+                toMarker.setPopupContent(
+                    `<strong>TO</strong><br>
+                    ${escapeHTML(toPlace.name)}`
+                );
+
+            }
+
+
+            // ------------------------------------------
+            // CLOSE SEARCH RESULTS
+            // ------------------------------------------
+
+            closeSearchResults();
+
+
+            // ------------------------------------------
+            // REMOVE OLD ROUTE
+            // ------------------------------------------
+
+            removeRoute();
+
+
+            // ------------------------------------------
+            // HIDE OLD RESULT CARDS
+            // ------------------------------------------
+
+            hideResultCards();
+
+
+            // ------------------------------------------
+            // ANIMATION
+            // ------------------------------------------
+
+            swapBtn.classList.add(
+                "swapping"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    swapBtn.classList.remove(
+                        "swapping"
+                    );
+
+                },
+                300
+            );
+
+        }
+    );
+
+}
 
 
 // ======================================================
 // 7. FROM SEARCH
 // ======================================================
 
-fromInput.addEventListener(
-    "input",
-    function () {
+if (fromInput) {
 
-        clearTimeout(
-            fromSearchTimer
-        );
+    fromInput.addEventListener(
+        "input",
+        function () {
 
-
-        fromSearchTimer =
-            setTimeout(
-                function () {
-
-                    searchLocations(
-                        fromInput.value,
-                        fromResults,
-                        "from"
-                    );
-
-                },
-                400
+            clearTimeout(
+                fromSearchTimer
             );
 
-    }
-);
+
+            // User changed the input,
+            // so the previous selected place is no longer valid.
+
+            fromPlace = null;
+
+
+            fromSearchTimer =
+                setTimeout(
+                    function () {
+
+                        searchLocations(
+                            fromInput.value,
+                            fromResults,
+                            "from"
+                        );
+
+                    },
+                    400
+                );
+
+        }
+    );
+
+}
 
 
 // ======================================================
 // 8. TO SEARCH
 // ======================================================
 
-toInput.addEventListener(
-    "input",
-    function () {
+if (toInput) {
 
-        clearTimeout(
-            toSearchTimer
-        );
+    toInput.addEventListener(
+        "input",
+        function () {
 
-
-        toSearchTimer =
-            setTimeout(
-                function () {
-
-                    searchLocations(
-                        toInput.value,
-                        toResults,
-                        "to"
-                    );
-
-                },
-                400
+            clearTimeout(
+                toSearchTimer
             );
 
-    }
-);
+
+            // User changed the input,
+            // so the previous selected place is no longer valid.
+
+            toPlace = null;
+
+
+            toSearchTimer =
+                setTimeout(
+                    function () {
+
+                        searchLocations(
+                            toInput.value,
+                            toResults,
+                            "to"
+                        );
+
+                    },
+                    400
+                );
+
+        }
+    );
+
+}
 
 
 // ======================================================
@@ -364,6 +361,11 @@ async function searchLocations(
     resultContainer,
     type
 ) {
+
+    if (!resultContainer) {
+        return;
+    }
+
 
     query =
         query.trim();
@@ -395,6 +397,7 @@ async function searchLocations(
             Searching Uganda...
         </div>
     `;
+
 
     resultContainer.style.display =
         "block";
@@ -522,6 +525,11 @@ function displaySearchResults(
     type
 ) {
 
+    if (!container) {
+        return;
+    }
+
+
     container.innerHTML =
         "";
 
@@ -537,8 +545,10 @@ function displaySearchResults(
             </div>
         `;
 
+
         container.style.display =
             "block";
+
 
         return;
 
@@ -674,13 +684,17 @@ function displaySearchResults(
 
                     selectLocation(
                         {
-                            name: name,
+                            name:
+                                name,
 
-                            address: address,
+                            address:
+                                address,
 
-                            lat: latitude,
+                            lat:
+                                latitude,
 
-                            lon: longitude
+                            lon:
+                                longitude
 
                         },
                         type
@@ -756,9 +770,24 @@ function selectLocation(
             selectedPlace.name;
 
 
-        fromResults.style.display =
-            "none";
+        // ----------------------------------------------
+        // CLOSE FROM SEARCH
+        // ----------------------------------------------
 
+        if (fromResults) {
+
+            fromResults.style.display =
+                "none";
+
+            fromResults.innerHTML =
+                "";
+
+        }
+
+
+        // ----------------------------------------------
+        // REMOVE OLD MARKER
+        // ----------------------------------------------
 
         if (fromMarker) {
 
@@ -768,6 +797,10 @@ function selectLocation(
 
         }
 
+
+        // ----------------------------------------------
+        // CREATE FROM MARKER
+        // ----------------------------------------------
 
         fromMarker =
             L.marker(
@@ -801,9 +834,24 @@ function selectLocation(
             selectedPlace.name;
 
 
-        toResults.style.display =
-            "none";
+        // ----------------------------------------------
+        // CLOSE TO SEARCH
+        // ----------------------------------------------
 
+        if (toResults) {
+
+            toResults.style.display =
+                "none";
+
+            toResults.innerHTML =
+                "";
+
+        }
+
+
+        // ----------------------------------------------
+        // REMOVE OLD MARKER
+        // ----------------------------------------------
 
         if (toMarker) {
 
@@ -813,6 +861,10 @@ function selectLocation(
 
         }
 
+
+        // ----------------------------------------------
+        // CREATE TO MARKER
+        // ----------------------------------------------
 
         toMarker =
             L.marker(
@@ -833,15 +885,24 @@ function selectLocation(
 
 
     // ----------------------------------------------
-    // HIDE OLD RESULTS
+    // HIDE OLD ROUTE RESULTS
     // ----------------------------------------------
 
     if (resultCard) {
-        resultCard.classList.add("hidden");
+
+        resultCard.classList.add(
+            "hidden"
+        );
+
     }
 
+
     if (flightLevelCard) {
-        flightLevelCard.classList.add("hidden");
+
+        flightLevelCard.classList.add(
+            "hidden"
+        );
+
     }
 
 
@@ -864,10 +925,14 @@ function selectLocation(
 // 12. CALCULATE ROUTE BUTTON
 // ======================================================
 
-calculateBtn.addEventListener(
-    "click",
-    calculateRoute
-);
+if (calculateBtn) {
+
+    calculateBtn.addEventListener(
+        "click",
+        calculateRoute
+    );
+
+}
 
 
 // ======================================================
@@ -925,22 +990,44 @@ async function calculateRoute() {
 
 
     // ----------------------------------------------
+    // CLOSE SEARCH RESULTS
+    // ----------------------------------------------
+
+    closeSearchResults();
+
+
+    // ----------------------------------------------
     // SHOW LOADING
     // ----------------------------------------------
 
-    loading.classList.remove(
-        "hidden"
-    );
+    if (loading) {
 
+        loading.classList.remove(
+            "hidden"
+        );
 
-    // Hide previous results while calculating.
-
-    if (flightLevelCard) {
-        flightLevelCard.classList.add("hidden");
     }
 
+
+    // ----------------------------------------------
+    // HIDE OLD RESULTS WHILE CALCULATING
+    // ----------------------------------------------
+
+    if (flightLevelCard) {
+
+        flightLevelCard.classList.add(
+            "hidden"
+        );
+
+    }
+
+
     if (resultCard) {
-        resultCard.classList.add("hidden");
+
+        resultCard.classList.add(
+            "hidden"
+        );
+
     }
 
 
@@ -1047,6 +1134,18 @@ async function calculateRoute() {
 
 
         // ==================================================
+        // DISPLAY NORMAL RESULT CARD
+        // ==================================================
+
+        displayResult(
+            direction,
+            compass,
+            bearing,
+            distanceKm
+        );
+
+
+        // ==================================================
         // DISPLAY FLIGHT LEVEL
         // ==================================================
 
@@ -1056,33 +1155,23 @@ async function calculateRoute() {
 
 
         // ==================================================
-        // OPTIONAL NORMAL RESULT
-        // ==================================================
-
-        /*
-            The normal Travel Direction card is intentionally
-            kept hidden.
-
-            If you want it later, change this function call
-            to displayResult(...).
-        */
-
-        if (resultCard) {
-            resultCard.classList.add("hidden");
-        }
-
-
-        // ==================================================
-        // UPDATE FLIGHT LEVEL
+        // CONSOLE
         // ==================================================
 
         console.log(
             "Route calculated:",
             {
-                direction: direction,
-                compass: compass,
-                bearing: bearing,
-                distanceKm: distanceKm
+                direction:
+                    direction,
+
+                compass:
+                    compass,
+
+                bearing:
+                    bearing,
+
+                distanceKm:
+                    distanceKm
             }
         );
 
@@ -1095,10 +1184,21 @@ async function calculateRoute() {
         );
 
 
-        // Hide flight-level card if calculation fails.
+        if (resultCard) {
+
+            resultCard.classList.add(
+                "hidden"
+            );
+
+        }
+
 
         if (flightLevelCard) {
-            flightLevelCard.classList.add("hidden");
+
+            flightLevelCard.classList.add(
+                "hidden"
+            );
+
         }
 
 
@@ -1108,9 +1208,13 @@ async function calculateRoute() {
 
     } finally {
 
-        loading.classList.add(
-            "hidden"
-        );
+        if (loading) {
+
+            loading.classList.add(
+                "hidden"
+            );
+
+        }
 
     }
 
@@ -1135,6 +1239,24 @@ function drawRoute(
             routeLine
         );
 
+        routeLine =
+            null;
+
+    }
+
+
+    // ----------------------------------------------
+    // CHECK GEOMETRY
+    // ----------------------------------------------
+
+    if (
+        !geometry ||
+        !geometry.coordinates ||
+        geometry.coordinates.length === 0
+    ) {
+
+        return;
+
     }
 
 
@@ -1156,7 +1278,7 @@ function drawRoute(
 
 
     // ----------------------------------------------
-    // CREATE LINE
+    // CREATE ROUTE LINE
     // ----------------------------------------------
 
     routeLine =
@@ -1176,15 +1298,28 @@ function drawRoute(
     // FIT MAP
     // ----------------------------------------------
 
-    map.fitBounds(
-        routeLine.getBounds(),
-        {
-            padding: [
-                80,
-                80
-            ]
-        }
-    );
+    const bounds =
+        routeLine.getBounds();
+
+
+    if (bounds.isValid()) {
+
+        map.fitBounds(
+            bounds,
+            {
+                paddingTopLeft: [
+                    40,
+                    40
+                ],
+
+                paddingBottomRight: [
+                    40,
+                    40
+                ]
+            }
+        );
+
+    }
 
 }
 
@@ -1344,7 +1479,9 @@ function getEastWest(
         0.0001;
 
 
-    // Same longitude
+    // ----------------------------------------------
+    // SAME LONGITUDE
+    // ----------------------------------------------
 
     if (
         Math.abs(
@@ -1352,12 +1489,37 @@ function getEastWest(
         ) <= tolerance
     ) {
 
+        const latitudeDifference =
+            to.lat -
+            from.lat;
+
+
+        if (
+            latitudeDifference > 0
+        ) {
+
+            return "NORTHBOUND";
+
+        }
+
+
+        if (
+            latitudeDifference < 0
+        ) {
+
+            return "SOUTHBOUND";
+
+        }
+
+
         return "NORTH/SOUTH";
 
     }
 
 
-    // Destination is east
+    // ----------------------------------------------
+    // EAST
+    // ----------------------------------------------
 
     if (
         longitudeDifference > 0
@@ -1368,7 +1530,9 @@ function getEastWest(
     }
 
 
-    // Destination is west
+    // ----------------------------------------------
+    // WEST
+    // ----------------------------------------------
 
     return "WESTBOUND";
 
@@ -1383,13 +1547,7 @@ function displayFlightLevelReminder(
     direction
 ) {
 
-    // Make sure the element exists.
-
     if (!flightLevelCard) {
-
-        console.error(
-            "flightLevelCard was not found in HTML."
-        );
 
         return;
 
@@ -1409,41 +1567,53 @@ function displayFlightLevelReminder(
         );
 
 
-        flightLevelDirection.textContent =
-            "EASTBOUND — ODD LEVELS";
+        if (flightLevelDirection) {
+
+            flightLevelDirection.textContent =
+                "EASTBOUND — ODD LEVELS";
 
 
-        flightLevelDirection.style.color =
-            "#159447";
+            flightLevelDirection.style.color =
+                "#159447";
+
+        }
 
 
-        flightLevelMessage.textContent =
-            "Eastbound traffic is associated with odd flight levels under the applicable semicircular rule.";
+        if (flightLevelMessage) {
+
+            flightLevelMessage.textContent =
+                "Eastbound traffic is associated with odd flight levels under the applicable semicircular rule.";
+
+        }
 
 
-        flightLevels.innerHTML = `
+        if (flightLevels) {
 
-            <span class="flight-level">
-                FL 110
-            </span>
+            flightLevels.innerHTML = `
 
-            <span class="flight-level">
-                FL 130
-            </span>
+                <span class="flight-level">
+                    FL 110
+                </span>
 
-            <span class="flight-level">
-                FL 150
-            </span>
+                <span class="flight-level">
+                    FL 130
+                </span>
 
-            <span class="flight-level">
-                FL 170
-            </span>
+                <span class="flight-level">
+                    FL 150
+                </span>
 
-            <span class="flight-level">
-                FL 190
-            </span>
+                <span class="flight-level">
+                    FL 170
+                </span>
 
-        `;
+                <span class="flight-level">
+                    FL 190
+                </span>
+
+            `;
+
+        }
 
 
         return;
@@ -1464,41 +1634,53 @@ function displayFlightLevelReminder(
         );
 
 
-        flightLevelDirection.textContent =
-            "WESTBOUND — EVEN LEVELS";
+        if (flightLevelDirection) {
+
+            flightLevelDirection.textContent =
+                "WESTBOUND — EVEN LEVELS";
 
 
-        flightLevelDirection.style.color =
-            "#1266f1";
+            flightLevelDirection.style.color =
+                "#1266f1";
+
+        }
 
 
-        flightLevelMessage.textContent =
-            "Westbound traffic is associated with even flight levels under the applicable semicircular rule.";
+        if (flightLevelMessage) {
+
+            flightLevelMessage.textContent =
+                "Westbound traffic is associated with even flight levels under the applicable semicircular rule.";
+
+        }
 
 
-        flightLevels.innerHTML = `
+        if (flightLevels) {
 
-            <span class="flight-level">
-                FL 120
-            </span>
+            flightLevels.innerHTML = `
 
-            <span class="flight-level">
-                FL 140
-            </span>
+                <span class="flight-level">
+                    FL 120
+                </span>
 
-            <span class="flight-level">
-                FL 160
-            </span>
+                <span class="flight-level">
+                    FL 140
+                </span>
 
-            <span class="flight-level">
-                FL 180
-            </span>
+                <span class="flight-level">
+                    FL 160
+                </span>
 
-            <span class="flight-level">
-                FL 200
-            </span>
+                <span class="flight-level">
+                    FL 180
+                </span>
 
-        `;
+                <span class="flight-level">
+                    FL 200
+                </span>
+
+            `;
+
+        }
 
 
         return;
@@ -1518,14 +1700,8 @@ function displayFlightLevelReminder(
 
 
 // ======================================================
-// 19. OPTIONAL DISPLAY RESULT
+// 19. DISPLAY ROUTE RESULT
 // ======================================================
-//
-// This function is kept in the code in case you want
-// the Travel Direction card again later.
-//
-// Currently calculateRoute() does NOT call it.
-//
 
 function displayResult(
     direction,
@@ -1535,14 +1711,28 @@ function displayResult(
 ) {
 
     if (!resultCard) {
+
+        console.error(
+            "resultCard was not found in the HTML."
+        );
+
         return;
+
     }
 
+
+    // ==================================================
+    // SHOW RESULT CARD
+    // ==================================================
 
     resultCard.classList.remove(
         "hidden"
     );
 
+
+    // ==================================================
+    // DIRECTION
+    // ==================================================
 
     if (directionResult) {
 
@@ -1552,7 +1742,11 @@ function displayResult(
     }
 
 
-    if (fromName) {
+    // ==================================================
+    // FROM
+    // ==================================================
+
+    if (fromName && fromPlace) {
 
         fromName.textContent =
             fromPlace.name;
@@ -1560,13 +1754,21 @@ function displayResult(
     }
 
 
-    if (toName) {
+    // ==================================================
+    // TO
+    // ==================================================
+
+    if (toName && toPlace) {
 
         toName.textContent =
             toPlace.name;
 
     }
 
+
+    // ==================================================
+    // BEARING
+    // ==================================================
 
     if (bearingValue) {
 
@@ -1576,6 +1778,10 @@ function displayResult(
     }
 
 
+    // ==================================================
+    // COMPASS
+    // ==================================================
+
     if (compassValue) {
 
         compassValue.textContent =
@@ -1583,6 +1789,10 @@ function displayResult(
 
     }
 
+
+    // ==================================================
+    // DISTANCE
+    // ==================================================
 
     if (distanceValue) {
 
@@ -1603,11 +1813,20 @@ function displayResult(
     }
 
 
+    // ==================================================
+    // DIRECTION ARROW
+    // ==================================================
+
     if (directionArrow) {
 
         directionArrow.textContent =
-            getArrow(compass);
+            getArrow(
+                compass
+            );
 
+
+        // Keep arrow visually pointing
+        // toward calculated bearing.
 
         directionArrow.style.transform =
             `rotate(${bearing}deg)`;
@@ -1615,60 +1834,87 @@ function displayResult(
     }
 
 
-    // ----------------------------------------------
-    // EASTBOUND
-    // ----------------------------------------------
+    // ==================================================
+    // EASTBOUND STYLE
+    // ==================================================
 
     if (
         direction === "EASTBOUND"
     ) {
 
-        directionResult.style.color =
-            "#159447";
+        if (directionResult) {
 
-        directionArrow.style.background =
-            "#e9f8ef";
+            directionResult.style.color =
+                "#159447";
 
-        directionArrow.style.color =
-            "#159447";
+        }
+
+
+        if (directionArrow) {
+
+            directionArrow.style.background =
+                "#e9f8ef";
+
+            directionArrow.style.color =
+                "#159447";
+
+        }
 
     }
 
 
-    // ----------------------------------------------
-    // WESTBOUND
-    // ----------------------------------------------
+    // ==================================================
+    // WESTBOUND STYLE
+    // ==================================================
 
     else if (
         direction === "WESTBOUND"
     ) {
 
-        directionResult.style.color =
-            "#1266f1";
+        if (directionResult) {
 
-        directionArrow.style.background =
-            "#edf4ff";
+            directionResult.style.color =
+                "#1266f1";
 
-        directionArrow.style.color =
-            "#1266f1";
+        }
+
+
+        if (directionArrow) {
+
+            directionArrow.style.background =
+                "#edf4ff";
+
+            directionArrow.style.color =
+                "#1266f1";
+
+        }
 
     }
 
 
-    // ----------------------------------------------
+    // ==================================================
     // NORTH / SOUTH
-    // ----------------------------------------------
+    // ==================================================
 
     else {
 
-        directionResult.style.color =
-            "#6b7280";
+        if (directionResult) {
 
-        directionArrow.style.background =
-            "#f3f4f6";
+            directionResult.style.color =
+                "#6b7280";
 
-        directionArrow.style.color =
-            "#6b7280";
+        }
+
+
+        if (directionArrow) {
+
+            directionArrow.style.background =
+                "#f3f4f6";
+
+            directionArrow.style.color =
+                "#6b7280";
+
+        }
 
     }
 
@@ -1713,13 +1959,87 @@ function getArrow(
 
 
 // ======================================================
-// 21. CLEAR EVERYTHING
+// 21. REMOVE ROUTE
 // ======================================================
 
-clearBtn.addEventListener(
-    "click",
-    clearMap
-);
+function removeRoute() {
+
+    if (routeLine) {
+
+        map.removeLayer(
+            routeLine
+        );
+
+        routeLine =
+            null;
+
+    }
+
+}
+
+
+// ======================================================
+// 22. HIDE RESULT CARDS
+// ======================================================
+
+function hideResultCards() {
+
+    if (resultCard) {
+
+        resultCard.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (flightLevelCard) {
+
+        flightLevelCard.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// 23. CLOSE SEARCH RESULTS
+// ======================================================
+
+function closeSearchResults() {
+
+    if (fromResults) {
+
+        fromResults.style.display =
+            "none";
+
+    }
+
+
+    if (toResults) {
+
+        toResults.style.display =
+            "none";
+
+    }
+
+}
+
+
+// ======================================================
+// 24. CLEAR EVERYTHING
+// ======================================================
+
+if (clearBtn) {
+
+    clearBtn.addEventListener(
+        "click",
+        clearMap
+    );
+
+}
 
 
 function clearMap() {
@@ -1728,19 +2048,31 @@ function clearMap() {
     // RESET PLACES
     // ----------------------------------------------
 
-    fromPlace = null;
-    toPlace = null;
+    fromPlace =
+        null;
+
+    toPlace =
+        null;
 
 
     // ----------------------------------------------
     // RESET INPUTS
     // ----------------------------------------------
 
-    fromInput.value =
-        "";
+    if (fromInput) {
 
-    toInput.value =
-        "";
+        fromInput.value =
+            "";
+
+    }
+
+
+    if (toInput) {
+
+        toInput.value =
+            "";
+
+    }
 
 
     // ----------------------------------------------
@@ -1779,16 +2111,7 @@ function clearMap() {
     // REMOVE ROUTE
     // ----------------------------------------------
 
-    if (routeLine) {
-
-        map.removeLayer(
-            routeLine
-        );
-
-        routeLine =
-            null;
-
-    }
+    removeRoute();
 
 
     // ----------------------------------------------
@@ -1821,18 +2144,23 @@ function clearMap() {
     // CLOSE SEARCH RESULTS
     // ----------------------------------------------
 
-    fromResults.style.display =
-        "none";
-
-    toResults.style.display =
-        "none";
+    closeSearchResults();
 
 
-    fromResults.innerHTML =
-        "";
+    if (fromResults) {
 
-    toResults.innerHTML =
-        "";
+        fromResults.innerHTML =
+            "";
+
+    }
+
+
+    if (toResults) {
+
+        toResults.innerHTML =
+            "";
+
+    }
 
 
     // ----------------------------------------------
@@ -1851,7 +2179,7 @@ function clearMap() {
 
 
 // ======================================================
-// 22. CLOSE SEARCH RESULTS
+// 25. CLOSE SEARCH RESULTS WHEN CLICKING OUTSIDE
 // ======================================================
 
 document.addEventListener(
@@ -1864,11 +2192,7 @@ document.addEventListener(
             )
         ) {
 
-            fromResults.style.display =
-                "none";
-
-            toResults.style.display =
-                "none";
+            closeSearchResults();
 
         }
 
@@ -1877,7 +2201,7 @@ document.addEventListener(
 
 
 // ======================================================
-// 23. ESCAPE HTML
+// 26. ESCAPE HTML
 // ======================================================
 
 function escapeHTML(
@@ -1900,7 +2224,7 @@ function escapeHTML(
 
 
 // ======================================================
-// 24. MAP RESIZE FIX
+// 27. MAP RESIZE FIX
 // ======================================================
 
 setTimeout(
@@ -1910,4 +2234,28 @@ setTimeout(
 
     },
     500
+);
+
+
+// ======================================================
+// 28. ADDITIONAL MAP RESIZE FIX
+// ======================================================
+
+// Helps especially when the map is inside a
+// responsive desktop layout.
+
+window.addEventListener(
+    "resize",
+    function () {
+
+        setTimeout(
+            function () {
+
+                map.invalidateSize();
+
+            },
+            100
+        );
+
+    }
 );
