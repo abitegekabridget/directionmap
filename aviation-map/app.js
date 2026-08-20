@@ -60,6 +60,8 @@ const calculateBtn =
 
 const clearBtn =
     document.getElementById("clearBtn");
+const swapBtn =
+    document.getElementById("swapBtn");
 
 const resultCard =
     document.getElementById("resultCard");
@@ -89,6 +91,111 @@ const loading =
     document.getElementById("loading");
 
 
+
+
+// ======================================================
+// 5. SWAP FROM / TO
+// ======================================================
+
+swapBtn.addEventListener(
+    "click",
+    function () {
+
+        // Swap the text in the input boxes
+
+        const oldFromText =
+            fromInput.value;
+
+        fromInput.value =
+            toInput.value;
+
+        toInput.value =
+            oldFromText;
+
+
+        // Swap the selected locations
+
+        const oldFromPlace =
+            fromPlace;
+
+        fromPlace =
+            toPlace;
+
+        toPlace =
+            oldFromPlace;
+
+
+        // Swap the markers
+
+        const oldFromMarker =
+            fromMarker;
+
+        fromMarker =
+            toMarker;
+
+        toMarker =
+            oldFromMarker;
+
+
+        // Update marker popups
+
+        if (fromMarker) {
+
+            fromMarker.setPopupContent(
+                `<strong>FROM</strong><br>
+                ${escapeHTML(fromPlace.name)}`
+            );
+
+        }
+
+
+        if (toMarker) {
+
+            toMarker.setPopupContent(
+                `<strong>TO</strong><br>
+                ${escapeHTML(toPlace.name)}`
+            );
+
+        }
+
+
+        // Clear old search suggestions
+
+        fromResults.style.display =
+            "none";
+
+        toResults.style.display =
+            "none";
+
+
+        fromResults.innerHTML =
+            "";
+
+        toResults.innerHTML =
+            "";
+
+
+        // If a route/result is already displayed,
+        // remove it because the direction has changed.
+
+        if (routeLine) {
+
+            map.removeLayer(
+                routeLine
+            );
+
+            routeLine =
+                null;
+
+        }
+
+
+        resultCard.classList.add(
+            "hidden"
+        );
+
+    }
+);
 // ======================================================
 // 5. SEARCH FROM LOCATION
 // ======================================================
