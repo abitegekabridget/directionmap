@@ -763,3 +763,100 @@ body {
 .swap-btn.swapping {
     transform: rotate(180deg);
 }
+/* =========================================
+   FLIGHT LEVEL REMINDER
+========================================= */
+
+.flight-level-card {
+    margin-top: 14px;
+    padding: 14px;
+
+    background: #f7faff;
+
+    border: 1px solid #dce8f8;
+
+    border-radius: 10px;
+}
+
+
+.flight-level-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.flight-level-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    background: #eaf2ff;
+
+    color: #1266f1;
+
+    font-size: 17px;
+}
+
+
+.flight-level-direction {
+    margin-top: 3px;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.flight-level-message {
+    margin-top: 10px;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+
+    color: #667085;
+}
+
+
+.flight-levels {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-top: 11px;
+}
+
+
+.flight-level {
+    padding: 6px 9px;
+
+    border-radius: 6px;
+
+    background: white;
+
+    border: 1px solid #d6e2f2;
+
+    color: #172033;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.flight-level-note {
+    margin-top: 10px;
+
+    font-size: 9px;
+
+    line-height: 1.4;
+
+    color: #8a94a6;
+}
