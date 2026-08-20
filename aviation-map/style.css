@@ -1035,3 +1035,56 @@ body {
 .result-card:not(.hidden) ~ .flight-level-card:not(.hidden) {
     bottom: 300px;
 }
+.result-details {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 16px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+
+.detail {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-width: 0;
+}
+
+
+.detail-icon {
+    font-size: 17px;
+}
+
+
+.detail-label {
+    font-size: 9px;
+
+    color: #8993a4;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.detail-value {
+    font-size: 14px;
+
+    font-weight: 800;
+
+    color: #172033;
+
+    margin-top: 3px;
+
+    white-space: nowrap;
+}
