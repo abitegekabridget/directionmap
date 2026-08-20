@@ -715,31 +715,27 @@ body {
 
 }
 /* =========================================
-   SWAP BUTTON
+   SMALL BLUE SWAP BUTTON
 ========================================= */
 
 .swap-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 5px;
 
-    width: 100%;
+    width: 75px;
+    height: 32px;
 
-    height: 34px;
+    margin: -5px 0 8px auto;
 
-    margin: 2px 0 10px;
+    border: none;
+    border-radius: 7px;
 
-    border: 1px solid #d9e2ec;
+    background: #1266f1;
+    color: white;
 
-    border-radius: 8px;
-
-    background: #f8fafc;
-
-    color: #1266f1;
-
-    font-size: 12px;
-
+    font-size: 11px;
     font-weight: 700;
 
     cursor: pointer;
@@ -749,23 +745,18 @@ body {
 
 
 .swap-icon {
-    font-size: 19px;
-
+    font-size: 17px;
     line-height: 1;
-
     font-weight: 700;
 }
 
 
 .swap-btn:hover {
-    background: #eef4ff;
-
-    border-color: #1266f1;
-
-    color: #0954ce;
+    background: #0954ce;
+    transform: translateY(-1px);
 }
 
 
 .swap-btn:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
 }
