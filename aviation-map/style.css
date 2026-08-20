@@ -688,14 +688,29 @@ body {
 
 
     .result-card {
+    position: absolute;
 
-        left: 12px;
+    left: 25px;
+    bottom: 25px;
 
-        bottom: 15px;
+    width: 390px;
 
-        width:
-            calc(100% - 24px);
-    }
+    max-height: 250px;
+    overflow-y: auto;
+
+    background: white;
+
+    border-radius: 14px;
+
+    z-index: 1000;
+
+    padding: 20px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.18);
+
+    scrollbar-width: thin;
+}
 
 
     .result-details {
@@ -765,14 +780,23 @@ body {
 ========================================= */
 
 .flight-level-card {
-    margin-top: 14px;
-    padding: 14px;
+    position: absolute;
 
-    background: #f7faff;
+    left: 25px;
+    bottom: 25px;
 
-    border: 1px solid #dce8f8;
+    width: 390px;
 
-    border-radius: 10px;
+    background: white;
+
+    border-radius: 14px;
+
+    z-index: 1001;
+
+    padding: 20px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.18);
 }
 
 
@@ -971,12 +995,6 @@ body {
 }
 
 
-@media (max-width: 700px) {
-
-    .flight-level-card {
-        left: 12px;
-        bottom: 15px;
-        width: calc(100% - 24px);
-    }
-
+.result-card:not(.hidden) ~ .flight-level-card:not(.hidden) {
+    bottom: 300px;
 }
