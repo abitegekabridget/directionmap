@@ -2,19 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>  Direction Map</title>
+    <title>Uganda Direction Map</title>
 
-    <!-- Leaflet -->
+    <!-- =========================================
+         LEAFLET CSS
+    ========================================== -->
+
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     >
 
-    <!-- Leaflet Routing Machine is NOT required -->
+    <!-- =========================================
+         YOUR CSS
+    ========================================== -->
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 
 <body>
@@ -32,13 +43,15 @@
             </div>
 
             <div>
+
                 <div class="brand-title">
-                   Route Direction Map
+                    Route Direction Map
                 </div>
 
                 <div class="brand-subtitle">
-                    East & West Bound
+                    East &amp; West Bound
                 </div>
+
             </div>
 
         </div>
@@ -47,10 +60,14 @@
 
 
     <!-- =========================================
-         MAP
+         MAIN
     ========================================== -->
 
     <main>
+
+        <!-- =====================================
+             MAP
+        ====================================== -->
 
         <div id="map"></div>
 
@@ -66,11 +83,13 @@
             </div>
 
             <div class="card-subtitle">
-                Search any location in the world
+                Search any location in Uganda
             </div>
 
 
-            <!-- FROM -->
+            <!-- =================================
+                 FROM LOCATION
+            ================================== -->
 
             <div class="location-input">
 
@@ -100,23 +119,33 @@
 
             </div>
 
-<button
-    id="swapBtn"
-    class="swap-btn"
-    type="button"
-    title="Swap departure and destination"
-    aria-label="Swap departure and destination"
->
 
-    <span class="swap-icon">
-        ⇅
-    </span>
+            <!-- =================================
+                 SWAP BUTTON
+            ================================== -->
+
+            <button
+                id="swapBtn"
+                class="swap-btn"
+                type="button"
+                title="Swap departure and destination"
+                aria-label="Swap departure and destination"
+            >
+
+                <span class="swap-icon">
+                    ⇅
+                </span>
+
+                <span class="swap-text">
+                    Swap
+                </span>
+
+            </button>
 
 
-</button>
-
-
-            <!-- TO -->
+            <!-- =================================
+                 TO LOCATION
+            ================================== -->
 
             <div class="location-input">
 
@@ -147,79 +176,40 @@
             </div>
 
 
-            <!-- CALCULATE -->
+            <!-- =================================
+                 CALCULATE BUTTON
+            ================================== -->
 
             <button
                 id="calculateBtn"
-                class="calculate-btn">
+                class="calculate-btn"
+                type="button"
+            >
 
-                <span>Calculate Direction</span>
+                <span>
+                    Calculate Direction
+                </span>
 
-                <span>→</span>
+                <span>
+                    →
+                </span>
 
             </button>
 
 
-            <!-- CLEAR -->
+            <!-- =================================
+                 CLEAR BUTTON
+            ================================== -->
 
             <button
                 id="clearBtn"
-                class="clear-btn">
-
+                class="clear-btn"
+                type="button"
+            >
                 Clear Route
-
             </button>
 
         </div>
-
-<div
-        id="flightLevelCard"
-        class="flight-level-card">
-
-        <div class="flight-level-header">
-
-            <div class="flight-level-icon">
-                ✈
-            </div>
-
-            <div>
-
-                <div class="result-label">
-                    SEMICIRCULAR RULE REMINDER
-                </div>
-
-                <div
-                    id="flightLevelDirection"
-                    class="flight-level-direction">
-                    -
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div
-            id="flightLevelMessage"
-            class="flight-level-message">
-            -
-        </div>
-
-
-        <div
-            id="flightLevels"
-            class="flight-levels">
-        </div>
-
-
-        <div class="flight-level-note">
-
-            Reference only. Verify applicable flight
-            levels, procedures and ATC clearance.
-
-        </div>
-
-    </div>
 
 
         <!-- =====================================
@@ -228,32 +218,40 @@
 
         <div
             id="resultCard"
-            class="result-card hidden">
+            class="result-card hidden"
+        >
+
+            <!-- RESULT HEADER -->
 
             <div class="result-header">
 
                 <div>
+
                     <div class="result-label">
                         TRAVEL DIRECTION
                     </div>
 
                     <div
                         id="directionResult"
-                        class="direction-result">
-
+                        class="direction-result"
+                    >
+                        -
                     </div>
+
                 </div>
+
 
                 <div
                     id="directionArrow"
-                    class="direction-arrow">
-
+                    class="direction-arrow"
+                >
                     →
-
                 </div>
 
             </div>
 
+
+            <!-- ROUTE NAME -->
 
             <div class="route-name">
 
@@ -272,9 +270,11 @@
             </div>
 
 
+            <!-- RESULT DETAILS -->
+
             <div class="result-details">
 
-                
+                <!-- DISTANCE -->
 
                 <div class="detail">
 
@@ -283,24 +283,140 @@
                     </div>
 
                     <div>
+
                         <div class="detail-label">
                             DISTANCE
                         </div>
 
                         <div
                             id="distanceValue"
-                            class="detail-value">
+                            class="detail-value"
+                        >
                             -
                         </div>
+
                     </div>
 
                 </div>
 
 
-               
+                <!-- BEARING -->
+
+                <div class="detail">
+
+                    <div class="detail-icon">
+                        🧭
+                    </div>
+
+                    <div>
+
+                        <div class="detail-label">
+                            BEARING
+                        </div>
+
+                        <div
+                            id="bearingValue"
+                            class="detail-value"
+                        >
+                            -
+                        </div>
+
                     </div>
 
                 </div>
+
+
+                <!-- COMPASS -->
+
+                <div class="detail">
+
+                    <div class="detail-icon">
+                        ↗
+                    </div>
+
+                    <div>
+
+                        <div class="detail-label">
+                            HEADING
+                        </div>
+
+                        <div
+                            id="compassValue"
+                            class="detail-value"
+                        >
+                            -
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             FLIGHT LEVEL REMINDER
+        ====================================== -->
+
+        <div
+            id="flightLevelCard"
+            class="flight-level-card hidden"
+        >
+
+            <!-- HEADER -->
+
+            <div class="flight-level-header">
+
+                <div class="flight-level-icon">
+                    ✈
+                </div>
+
+                <div>
+
+                    <div class="result-label">
+                        SEMICIRCULAR RULE REMINDER
+                    </div>
+
+                    <div
+                        id="flightLevelDirection"
+                        class="flight-level-direction"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="flightLevelMessage"
+                class="flight-level-message"
+            >
+                -
+            </div>
+
+
+            <!-- FLIGHT LEVELS -->
+
+            <div
+                id="flightLevels"
+                class="flight-levels"
+            >
+            </div>
+
+
+            <!-- NOTE -->
+
+            <div class="flight-level-note">
+
+                Reference only. Verify applicable
+                flight levels, procedures and ATC
+                clearance.
 
             </div>
 
@@ -313,7 +429,8 @@
 
         <div
             id="loading"
-            class="loading hidden">
+            class="loading hidden"
+        >
 
             <div class="spinner"></div>
 
@@ -326,12 +443,18 @@
     </main>
 
 
-    <!-- Leaflet -->
+    <!-- =========================================
+         LEAFLET JS
+    ========================================== -->
 
     <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-    </script>
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    ></script>
 
+
+    <!-- =========================================
+         YOUR JAVASCRIPT
+    ========================================== -->
 
     <script src="app.js"></script>
 
