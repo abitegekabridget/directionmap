@@ -760,3 +760,6 @@ body {
 .swap-btn:active {
     transform: scale(0.97);
 }
+.swap-btn.swapping {
+    transform: rotate(180deg);
+}
