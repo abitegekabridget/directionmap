@@ -101,45 +101,72 @@ swapBtn.addEventListener(
     "click",
     function () {
 
-        // Swap the text in the input boxes
+        // ==============================================
+        // SAVE CURRENT VALUES
+        // ==============================================
 
         const oldFromText =
             fromInput.value;
 
-        fromInput.value =
+        const oldToText =
             toInput.value;
+
+
+        const oldFromPlace =
+            fromPlace;
+
+        const oldToPlace =
+            toPlace;
+
+
+        const oldFromMarker =
+            fromMarker;
+
+        const oldToMarker =
+            toMarker;
+
+
+        // ==============================================
+        // SWAP TEXT
+        // ==============================================
+
+        fromInput.value =
+            oldToText;
 
         toInput.value =
             oldFromText;
 
 
-        // Swap the selected locations
-
-        const oldFromPlace =
-            fromPlace;
+        // ==============================================
+        // SWAP SELECTED LOCATIONS
+        // ==============================================
 
         fromPlace =
-            toPlace;
+            oldToPlace;
 
         toPlace =
             oldFromPlace;
 
 
-        // Swap the markers
-
-        const oldFromMarker =
-            fromMarker;
+        // ==============================================
+        // SWAP MAP MARKERS
+        // ==============================================
 
         fromMarker =
-            toMarker;
+            oldToMarker;
 
         toMarker =
             oldFromMarker;
 
 
-        // Update marker popups
+        // ==============================================
+        // UPDATE FROM MARKER
+        // ==============================================
 
-        if (fromMarker) {
+        if (
+            fromMarker &&
+            fromPlace
+        ) {
 
             fromMarker.setPopupContent(
                 `<strong>FROM</strong><br>
@@ -149,7 +176,14 @@ swapBtn.addEventListener(
         }
 
 
-        if (toMarker) {
+        // ==============================================
+        // UPDATE TO MARKER
+        // ==============================================
+
+        if (
+            toMarker &&
+            toPlace
+        ) {
 
             toMarker.setPopupContent(
                 `<strong>TO</strong><br>
@@ -159,14 +193,15 @@ swapBtn.addEventListener(
         }
 
 
-        // Clear old search suggestions
+        // ==============================================
+        // CLOSE SEARCH RESULTS
+        // ==============================================
 
         fromResults.style.display =
             "none";
 
         toResults.style.display =
             "none";
-
 
         fromResults.innerHTML =
             "";
@@ -175,8 +210,9 @@ swapBtn.addEventListener(
             "";
 
 
-        // If a route/result is already displayed,
-        // remove it because the direction has changed.
+        // ==============================================
+        // REMOVE OLD ROUTE
+        // ==============================================
 
         if (routeLine) {
 
@@ -190,8 +226,33 @@ swapBtn.addEventListener(
         }
 
 
+        // ==============================================
+        // HIDE OLD RESULT
+        // ==============================================
+
         resultCard.classList.add(
             "hidden"
+        );
+
+
+        // ==============================================
+        // ANIMATION
+        // ==============================================
+
+        swapBtn.classList.add(
+            "swapping"
+        );
+
+
+        setTimeout(
+            function () {
+
+                swapBtn.classList.remove(
+                    "swapping"
+                );
+
+            },
+            300
         );
 
     }
