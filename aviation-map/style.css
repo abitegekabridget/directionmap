@@ -423,14 +423,16 @@ body {
 ========================================== */
 
 .result-card {
-
     position: absolute;
 
     left: 25px;
-
     bottom: 25px;
 
     width: 390px;
+
+    max-height: calc(100vh - 120px);
+
+    overflow-y: auto;
 
     background: white;
 
@@ -442,14 +444,9 @@ body {
 
     box-shadow:
         0 8px 30px rgba(0, 0, 0, 0.18);
+
+    scrollbar-width: thin;
 }
-
-
-.hidden {
-
-    display: none !important;
-}
-
 
 .result-header {
 
